@@ -107,7 +107,6 @@ call plug#begin(stdpath('config').'/plugged')
 	Plug 'yuezk/vim-js' 							" Javascript
 	Plug 'MaxMEllon/vim-jsx-pretty' 				" JSX/React
 	Plug 'jackguo380/vim-lsp-cxx-highlight'			" C++ syntax
-	Plug 'OmniSharp/omnisharp-vim'                  " C# 
 	Plug 'uiiaoo/java-syntax.vim' 					" Java
     Plug 'SirVer/ultisnips' 						"react snippets
 	Plug 'mlaursen/vim-react-snippets' 				"React snippets 

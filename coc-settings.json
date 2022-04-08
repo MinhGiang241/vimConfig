@@ -1,6 +1,7 @@
 {
 		"coc.source.file.shortcut": "File",
 		"coc.source.around.shortcut": "?",
+		"coc.preferences.formatOnSaveFiletypes": ["css","cs", "markdown","html","cpp","js","json","jsx","ts","tsx"],
 		//"suggest.disableKind": true,
 		"suggest.completionItemKindLabels": {
 				"keyword": "\uf1de",
