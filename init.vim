@@ -17,6 +17,7 @@ set wildmenu
 
 " origin 
 set mouse=a 				" Enable mouse  
+set hidden
 set tabstop=4 				" 
 set shiftwidth=4 			" 
 set listchars=tab:\¦\ 		" Tab charactor 
@@ -92,7 +93,8 @@ call plug#begin(stdpath('config').'/plugged')
 	Plug 'vim-airline/vim-airline-themes'
 
 " Terminal
-	Plug 'voldikss/vim-floaterm' 					" Float terminal
+	" Plug 'voldikss/vim-floaterm' 					" Float terminal
+	Plug 'akinsho/toggleterm.nvim'
 
 " Code intellisense
 	Plug 'neoclide/coc.nvim', {'branch': 'release'} " Language server 
@@ -108,9 +110,13 @@ call plug#begin(stdpath('config').'/plugged')
 	Plug 'MaxMEllon/vim-jsx-pretty' 				" JSX/React
 	Plug 'jackguo380/vim-lsp-cxx-highlight'			" C++ syntax
 	Plug 'uiiaoo/java-syntax.vim' 					" Java
-    Plug 'SirVer/ultisnips' 						"react snippets
+    	Plug 'SirVer/ultisnips' 						"react snippets
 	Plug 'mlaursen/vim-react-snippets' 				"React snippets 
 
+	" post install (yarn install | npm install) then load plugin only for editing supported files
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install --frozen-lockfile --production',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html'] }
 
 "Debugging
 	Plug 'puremourning/vimspector' 					" Vimspector
@@ -145,4 +151,5 @@ nmap <Down> <C-e> nmap <Up> <C-y>
 for setting_file in split(glob(stdpath('config').'/settings/*.vim'))
 	execute 'source' setting_file
 endfor
+
 
