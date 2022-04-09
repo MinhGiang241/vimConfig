@@ -93,7 +93,7 @@ call plug#begin(stdpath('config').'/plugged')
 	Plug 'vim-airline/vim-airline-themes'
 
 " Terminal
-	" Plug 'voldikss/vim-floaterm' 					" Float terminal
+	Plug 'voldikss/vim-floaterm' 					" Float terminal
 	Plug 'akinsho/toggleterm.nvim'
 
 " Code intellisense
@@ -145,7 +145,7 @@ endif
 " Disable automatic comment in newline
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-nmap <Down> <C-e> nmap <Up> <C-y>
+" nmap <Down> <C-e> nmap <Up> <C-y>
 
 " Other setting
 for setting_file in split(glob(stdpath('config').'/settings/*.vim'))
