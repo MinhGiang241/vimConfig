@@ -5,7 +5,7 @@
 -- Enable powershell as your default shell
 vim.opt.shell = "pwsh.exe -NoLogo"
 vim.opt.shellcmdflag =
-  "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
+"-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
 vim.cmd [[
 		let &shellredir = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
 		let &shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
@@ -115,7 +115,7 @@ lvim.builtin.treesitter.auto_install = true
 --     args = { "--severity", "warning" },
 --   },
 -- }
-
+-- `/` cmdline setup.
 -- -- Additional Plugins <https://www.lunarvim.org/docs/plugins#user-plugins>
 lvim.plugins = {
   --     {
@@ -123,6 +123,87 @@ lvim.plugins = {
   --       cmd = "TroubleToggle",
   --
   --}
+  -- {
+  --   'VonHeikemen/fine-cmdline.nvim',
+  --   dependencies = {
+  --     { 'MunifTanjim/nui.nvim' }
+  --   }
+  -- },
+  -- {
+  --   "folke/noice.nvim",
+  --   config = function()
+  --     require("noice").setup({
+  {
+    'MunifTanjim/nui.nvim',
+    config = function()
+      local Input = require("nui.input")
+      local event = require("nui.utils.autocmd").event
+
+      local input = Input({
+        position = "50%",
+        size = {
+          width = 20,
+        },
+        border = {
+          style = "single",
+          text = {
+            top = "[Howdy?]",
+            top_align = "center",
+          },
+        },
+        win_options = {
+          winhighlight = "Normal:Normal,FloatBorder:Normal",
+        },
+      }, {
+        prompt = "> ",
+        default_value = "Hello",
+        on_close = function()
+          print("Input Closed!")
+        end,
+        on_submit = function(value)
+          print("Input Submitted: " .. value)
+        end,
+      })
+
+      input:map("n", ":", function()
+        input:mount()
+      end, { noremap = true })
+
+      input:map("n", "<ESC>", function()
+        input:unmount()
+      end, { noremap = true })
+      -- mount/open the component
+      input:mount()
+
+      -- unmount component when cursor leaves buffer
+      input:on(event.BufLeave, function()
+        input:unmount()
+      end)
+    end
+  },
+  --       -- add any options here
+  --     })
+  --   end,
+  --   dependencies = {
+  --     -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+  --     "MunifTanjim/nui.nvim",
+  --     -- OPTIONAL:
+  --     --   `nvim-notify` is only needed, if you want to use the notification view.
+  --     --   If not available, we use `mini` as the fallback
+  --     --"rcarriga/nvim-notify",
+  --   }
+  -- },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    config = function()
+      require("indent_blankline").setup {
+        char = "▏",
+        show_trailing_blankline_indent = false,
+        show_first_indent_level = false,
+        use_treesitter = true,
+      }
+    end
+  },
   {
     "smjonas/inc-rename.nvim",
     config = function()
@@ -136,22 +217,37 @@ lvim.plugins = {
       require("colorizer").setup(
         { "css", "scss", "html", "javascript", "dart", "typescript", "go", "c_sharp", "python" },
         {
-          RGB = true, -- #RGB hex codes
-          RRGGBB = true, -- #RRGGBB hex codes
+          RGB = true,      -- #RGB hex codes
+          RRGGBB = true,   -- #RRGGBB hex codes
           RRGGBBAA = true, -- #RRGGBBAA hex codes
-          rgb_fn = true, -- CSS rgb() and rgba() functions
-          hsl_fn = true, -- CSS hsl() and hsla() functions
-          css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
-          css_fn = true, -- Enable all CSS *functions*: rgb_fn, hsl_fn
+          rgb_fn = true,   -- CSS rgb() and rgba() functions
+          hsl_fn = true,   -- CSS hsl() and hsla() functions
+          css = true,      -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+          css_fn = true,   -- Enable all CSS *functions*: rgb_fn, hsl_fn
         }
       )
     end,
   },
 
+
+
   {
     "windwp/nvim-ts-autotag",
     config = function()
-      require("nvim-ts-autotag").setup()
+      require("nvim-ts-autotag").setup({
+        filetypes = {
+          'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'svelte', 'vue', 'tsx', 'jsx',
+          'rescript',
+          'xml',
+          'php',
+          'markdown',
+          'glimmer', 'handlebars', 'hbs'
+        },
+        skip_tags = {
+          'area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'slot',
+          'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr', 'menuitem'
+        }
+      })
     end,
   },
 
