@@ -43,7 +43,7 @@ lvim.format_on_save = {
 
 -- keymappings <https://www.lunarvim.org/docs/configuration/keybindings>
 lvim.leader = "space"
--- add your own keymapping
+
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
 
 -- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
@@ -212,12 +212,83 @@ lvim.plugins = {
     end,
   },
 
+  -- {
+  --   "mfussenegger/nvim-dap",
+  --   config = function()
+  --     require("nvim-dap").setup({
+
+  --     })
+  --   end
+  -- },
+  {
+    "rcarriga/nvim-dap-ui",
+    config = function()
+      require("nvim-dap-ui").setup({})
+    end
+  },
   {
     "akinsho/flutter-tools.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "stevearc/dressing.nvim", -- optional for vim.ui.select
     },
+    config = function()
+      require("flutter-tools").setup({
+        widget_guides = {
+          enabled = true,
+
+        },
+        debugger = {
+          -- integrate with nvim dap + install dart code debugger
+          enabled = false,
+          run_via_dap = true, -- use dap instead of a plenary job to run flutter apps
+          -- if empty dap will not stop on any exceptions, otherwise it will stop on those specified
+          -- see |:help dap.set_exception_breakpoints()| for more info
+          exception_breakpoints = {},
+          register_configurations = function(_)
+            require("dap").configurations.dart = {
+              {
+                type = "dart",
+                request = "launch",
+                name = "Launch flutter",
+                dartSdkPath = os.getenv('HOME') .. "/flutter/bin/cache/dart-sdk/",
+                flutterSdkPath = os.getenv('HOME') .. "/flutter",
+                program = "${workspaceFolder}/lib/main.dart",
+                cwd = "${workspaceFolder}",
+              }
+
+            }
+            require("dap").adapters.dart = {
+              type = "executable",
+              command = "node",
+              args = { "C:\\Users\\minhg\\Dart-Code\\out\\dist\\debug.js", "flutter" }
+            }
+          end,
+          flutter_path = "C:\\flutter", -- <-- this takes priority over the lookup
+          flutter_lookup_cmd = nil,     -- example "dirname $(which flutter)" or "asdf where flutter"
+          fvm = false,                  -- takes priority over path, uses <workspace>/.fvm/flutter_sdk if enabled
+          dev_log = {
+            enabled = true,
+            open_cmd = "tabedit", -- command to use to open the log buffer
+          },
+          dev_tools = {
+            autostart = false,         -- autostart devtools server if not detected
+            auto_open_browser = false, -- Automatically opens devtools in the browser
+          },
+          outline = {
+            open_cmd = "30vnew", -- command to use to open the outline buffer
+            auto_open = false    -- if true this will open the outline automatically when it is first populated
+          },
+          settings = {
+            showTodos = true,
+            completeFunctionCalls = true,
+            analysisExcludedFolders = { "C:\\flutter" },
+            renameFilesWithClasses = "prompt", -- "always"
+            enableSnippets = true,
+          }
+        }
+      })
+    end
   },
   {
     "Nash0x7E2/awesome-flutter-snippets",
