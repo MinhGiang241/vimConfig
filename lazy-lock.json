@@ -11,8 +11,6 @@
   "cmp_luasnip": { "branch": "master", "commit": "18095520391186d634a0045dacaa346291096566" },
   "dart-vim-plugin": { "branch": "master", "commit": "81e50e80329e5eac2c115f45585b1838a614d07a" },
   "diffview.nvim": { "branch": "main", "commit": "58035354fc79c6ec42fa7b218dab90bd3968615f" },
-  "dressing.nvim": { "branch": "master", "commit": "5f44f829481640be0f96759c965ae22a3bcaf7ce" },
-  "flutter-tools.nvim": { "branch": "main", "commit": "727df22e2ae72a0482e5eb923e3d1c861a157a94" },
   "friendly-snippets": { "branch": "main", "commit": "009887b76f15d16f69ae1341f86a7862f61cf2a1" },
   "gitsigns.nvim": { "branch": "main", "commit": "b1f9cf7c5c5639c006c937fc1819e09f358210fc" },
   "glow.nvim": { "branch": "main", "commit": "3dba042cd878cb6b7ae39a33f3a7cbf6d1873b64" },

@@ -62,7 +62,7 @@ lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 vim.opt.guifont = "monospace:h12"
-vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "dartls" })
+
 
 -- Automatically install missing parsers when entering buffer
 lvim.builtin.treesitter.auto_install = true
@@ -222,77 +222,81 @@ lvim.plugins = {
   --     })
   --   end
   -- },
-  {
-    "akinsho/flutter-tools.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "stevearc/dressing.nvim", -- optional for vim.ui.select
-    },
-    config = function()
-      require("flutter-tools").setup({
-        widget_guides = {
-          enabled = true,
+  -- {
+  --   "akinsho/flutter-tools.nvim",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "stevearc/dressing.nvim", -- optional for vim.ui.select
+  --   },
+  --   after = "mason-lspconfig.nvim",
+  --   config = function()
+  --     require("flutter-tools").setup({
+  --       lsp = {
+  --         skip_setup = { "dartls" },
+  --       },
+  --       widget_guides = {
+  --         enabled = true,
 
-        },
-        debugger = {
-          -- integrate with nvim dap + install dart code debugger
-          enabled = false,
-          run_via_dap = true, -- use dap instead of a plenary job to run flutter apps
-          -- if empty dap will not stop on any exceptions, otherwise it will stop on those specified
-          -- see |:help dap.set_exception_breakpoints()| for more info
-          exception_breakpoints = {},
-          register_configurations = function(_)
-            require("dap").adapters.dart = {
-              type = "executable",
-              command = "node",
-              args = { "C:/Users/minhg/Downloads/Development/Dart-Code/out/dist/debug.js", "flutter" }
-            }
+  --       },
+  --       debugger = {
+  --         -- integrate with nvim dap + install dart code debugger
+  --         enabled = false,
+  --         run_via_dap = true, -- use dap instead of a plenary job to run flutter apps
+  --         -- if empty dap will not stop on any exceptions, otherwise it will stop on those specified
+  --         -- see |:help dap.set_exception_breakpoints()| for more info
+  --         exception_breakpoints = {},
+  --         register_configurations = function(_)
+  --           require("dap").adapters.dart = {
+  --             type = "executable",
+  --             command = "node",
+  --             args = { "C:/Users/minhg/Downloads/Development/Dart-Code/out/dist/debug.js", "flutter" }
+  --           }
 
-            require("dap").configurations.dart = {
-              {
-                type = "dart",
-                request = "launch",
-                name = "Launch flutter",
-                dartSdkPath = "C:/flutter/bin/cache/dart-sdk/",
-                flutterSdkPath = "C:/flutter",
-                program = "${workspaceFolder}/lib/main.dart",
-                cwd = "${workspaceFolder}",
-              }
+  --           require("dap").configurations.dart = {
+  --             {
+  --               type = "dart",
+  --               request = "launch",
+  --               name = "Launch flutter",
+  --               dartSdkPath = "C:/flutter/bin/cache/dart-sdk/",
+  --               flutterSdkPath = "C:/flutter",
+  --               program = "${workspaceFolder}/lib/main.dart",
+  --               cwd = "${workspaceFolder}",
+  --             }
 
-            }
-            require("dap").set_log_level("DEBUG")
-            -- require("dap").adapters.dart = {
-            --   type = "executable",
-            --   command = "node",
-            --   args = { "C:\\Users\\minhg\\Dart-Code\\out\\dist\\debug.js", "flutter" }
-            -- }
-          end,
-          flutter_path = "C:\\flutter", -- <-- this takes priority over the lookup
-          flutter_lookup_cmd = nil,     -- example "dirname $(which flutter)" or "asdf where flutter"
-          fvm = false,                  -- takes priority over path, uses <workspace>/.fvm/flutter_sdk if enabled
-          dev_log = {
-            enabled = true,
-            open_cmd = "tabedit", -- command to use to open the log buffer
-          },
-          dev_tools = {
-            autostart = true,         -- autostart devtools server if not detected
-            auto_open_browser = true, -- Automatically opens devtools in the browser
-          },
-          outline = {
-            open_cmd = "30vnew", -- command to use to open the outline buffer
-            auto_open = false    -- if true this will open the outline automatically when it is first populated
-          },
-          settings = {
-            showTodos = true,
-            completeFunctionCalls = true,
-            analysisExcludedFolders = { "C:\\flutter" },
-            renameFilesWithClasses = "prompt", -- "always"
-            enableSnippets = true,
-          }
-        }
-      })
-    end
-  },
+  --           }
+  --           require("dap").set_log_level("DEBUG")
+  --           -- require("dap").adapters.dart = {
+  --           --   type = "executable",
+  --           --   command = "node",
+  --           --   args = { "C:\\Users\\minhg\\Dart-Code\\out\\dist\\debug.js", "flutter" }
+  --           -- }
+  --         end,
+  --         flutter_path = "C:\\flutter", -- <-- this takes priority over the lookup
+  --         flutter_lookup_cmd = nil,     -- example "dirname $(which flutter)" or "asdf where flutter"
+  --         fvm = false,                  -- takes priority over path, uses <workspace>/.fvm/flutter_sdk if enabled
+  --         dev_log = {
+  --           enabled = true,
+  --           open_cmd = "tabedit", -- command to use to open the log buffer
+  --         },
+  --         dev_tools = {
+  --           autostart = true,         -- autostart devtools server if not detected
+  --           auto_open_browser = true, -- Automatically opens devtools in the browser
+  --         },
+  --         outline = {
+  --           open_cmd = "30vnew", -- command to use to open the outline buffer
+  --           auto_open = false    -- if true this will open the outline automatically when it is first populated
+  --         },
+  --         settings = {
+  --           showTodos = true,
+  --           completeFunctionCalls = true,
+  --           analysisExcludedFolders = { "C:\\flutter" },
+  --           renameFilesWithClasses = "prompt", -- "always"
+  --           enableSnippets = true,
+  --         }
+  --       }
+  --     })
+  --   end
+  -- },
   {
     "rcarriga/nvim-dap-ui",
     config = function()
@@ -320,20 +324,6 @@ lvim.plugins = {
   --   end
   -- },
   {
-    "dart-lang/dart-vim-plugin",
-    ft = { "dart" },
-    --[[ config = function() ]]
-    --require("dart-vim-plugin").setup({})
-    -- Cấu hình format_on_save cho Dart
-    -- vim.api.nvim_exec([[
-    --   augroup dart_format_on_save
-    --   autocmd!
-    --   autocmd BufWritePre *.dart :silent! DartFmt
-    --   augroup END
-    -- ]], false)
-    --[[ end ]]
-  },
-  {
     "sindrets/diffview.nvim",
     event = "BufRead",
   },
@@ -345,17 +335,17 @@ lvim.plugins = {
     "rmagatti/goto-preview",
     config = function()
       require('goto-preview').setup {
-        width = 120,              -- Width of the floating window
-        height = 25,              -- Height of the floating window
-        default_mappings = false, -- Bind default mappings
-        debug = false,            -- Print debug information
-        opacity = nil,            -- 0-100 opacity level of the floating window where 100 is fully transparent.
-        post_open_hook = nil      -- A function taking two arguments, a buffer and a window to be ran as a hook.
+        width = 120,             -- Width of the floating window
+        height = 25,             -- Height of the floating window
+        default_mappings = true, -- Bind default mappings
+        debug = false,           -- Print debug information
+        opacity = nil,           -- 0-100 opacity level of the floating window where 100 is fully transparent.
+        post_open_hook = nil,    -- A function taking two arguments, a buffer and a window to be ran as a hook.
         -- You can use "default_mappings = true" setup option
         -- Or explicitly set keybindings
-        -- vim.cmd("nnoremap gpd <cmd>lua require('goto-preview').goto_preview_definition()<CR>")
-        -- vim.cmd("nnoremap gpi <cmd>lua require('goto-preview').goto_preview_implementation()<CR>")
-        -- vim.cmd("nnoremap gP <cmd>lua require('goto-preview').close_all_win()<CR>")
+        -- vim.cmd("nnoremap gpd <cmd>lua require('goto-preview').goto_preview_definition()<CR>"),
+        --  vim.cmd("nnoremap gpi <cmd>lua require('goto-preview').goto_preview_implementation()<CR>"),
+        --  vim.cmd("nnoremap gP <cmd>lua require('goto-preview').close_all_win()<CR>"),
       }
     end
   },
@@ -467,6 +457,20 @@ lvim.plugins = {
       vim.g.rnvimr_pick_enable = 1
       vim.g.rnvimr_bw_enable = 1
     end,
+  },
+  {
+    "dart-lang/dart-vim-plugin",
+    ft = { "dart" },
+    --[[ config = function() ]]
+    --require("dart-vim-plugin").setup({})
+    -- Cấu hình format_on_save cho Dart
+    -- vim.api.nvim_exec([[
+    --   augroup dart_format_on_save
+    --   autocmd!
+    --   autocmd BufWritePre *.dart :silent! DartFmt
+    --   augroup END
+    -- ]], false)
+    --[[ end ]]
   },
 }
 
