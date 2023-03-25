@@ -61,6 +61,8 @@ lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
+vim.opt.guifont = "monospace:h12"
+vim.list_extend(lvim.lsp.automatic_configuration.skipped_servers, { "dartls" })
 
 -- Automatically install missing parsers when entering buffer
 lvim.builtin.treesitter.auto_install = true
@@ -221,12 +223,6 @@ lvim.plugins = {
   --   end
   -- },
   {
-    "rcarriga/nvim-dap-ui",
-    config = function()
-      require("nvim-dap-ui").setup({})
-    end
-  },
-  {
     "akinsho/flutter-tools.nvim",
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -246,23 +242,30 @@ lvim.plugins = {
           -- see |:help dap.set_exception_breakpoints()| for more info
           exception_breakpoints = {},
           register_configurations = function(_)
+            require("dap").adapters.dart = {
+              type = "executable",
+              command = "node",
+              args = { "C:/Users/minhg/Downloads/Development/Dart-Code/out/dist/debug.js", "flutter" }
+            }
+
             require("dap").configurations.dart = {
               {
                 type = "dart",
                 request = "launch",
                 name = "Launch flutter",
-                dartSdkPath = os.getenv('HOME') .. "/flutter/bin/cache/dart-sdk/",
-                flutterSdkPath = os.getenv('HOME') .. "/flutter",
+                dartSdkPath = "C:/flutter/bin/cache/dart-sdk/",
+                flutterSdkPath = "C:/flutter",
                 program = "${workspaceFolder}/lib/main.dart",
                 cwd = "${workspaceFolder}",
               }
 
             }
-            require("dap").adapters.dart = {
-              type = "executable",
-              command = "node",
-              args = { "C:\\Users\\minhg\\Dart-Code\\out\\dist\\debug.js", "flutter" }
-            }
+            require("dap").set_log_level("DEBUG")
+            -- require("dap").adapters.dart = {
+            --   type = "executable",
+            --   command = "node",
+            --   args = { "C:\\Users\\minhg\\Dart-Code\\out\\dist\\debug.js", "flutter" }
+            -- }
           end,
           flutter_path = "C:\\flutter", -- <-- this takes priority over the lookup
           flutter_lookup_cmd = nil,     -- example "dirname $(which flutter)" or "asdf where flutter"
@@ -272,8 +275,8 @@ lvim.plugins = {
             open_cmd = "tabedit", -- command to use to open the log buffer
           },
           dev_tools = {
-            autostart = false,         -- autostart devtools server if not detected
-            auto_open_browser = false, -- Automatically opens devtools in the browser
+            autostart = true,         -- autostart devtools server if not detected
+            auto_open_browser = true, -- Automatically opens devtools in the browser
           },
           outline = {
             open_cmd = "30vnew", -- command to use to open the outline buffer
@@ -291,12 +294,36 @@ lvim.plugins = {
     end
   },
   {
-    "Nash0x7E2/awesome-flutter-snippets",
+    "rcarriga/nvim-dap-ui",
+    config = function()
+      require("nvim-dap-ui").setup({})
+    end
   },
+  {
+    "theHamsta/nvim-dap-virtual-text",
+    config = function()
+      require("nvim-dap-virtual-text").setup({})
+    end
+  },
+  -- {
+  --   "mattn/vim-lsp-settings",
+  --   config = function()
+  --     require("vim-lsp-settings").setup({})
+  --   end
+  -- },
+
+
+  -- {
+  --   "Nash0x7E2/awesome-flutter-snippets",
+  --   config = function()
+  --     require('Nash0x7E2/awesome-flutter-snippets').setup({})
+  --   end
+  -- },
   {
     "dart-lang/dart-vim-plugin",
     ft = { "dart" },
-    -- config = function()
+    --[[ config = function() ]]
+    --require("dart-vim-plugin").setup({})
     -- Cấu hình format_on_save cho Dart
     -- vim.api.nvim_exec([[
     --   augroup dart_format_on_save
@@ -304,7 +331,7 @@ lvim.plugins = {
     --   autocmd BufWritePre *.dart :silent! DartFmt
     --   augroup END
     -- ]], false)
-    -- end
+    --[[ end ]]
   },
   {
     "sindrets/diffview.nvim",
