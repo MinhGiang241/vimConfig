@@ -62,6 +62,9 @@ lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
 vim.opt.guifont = "monospace:h12"
+lvim.keys.normal_mode["K"] = ":lua vim.lsp.buf.hover()<CR>"
+lvim.keys.normal_mode["gd"] = ":lua vim.lsp.buf.definition()<CR>"
+
 
 
 -- Automatically install missing parsers when entering buffer
@@ -180,13 +183,13 @@ lvim.plugins = {
       require("colorizer").setup(
         { "css", "scss", "html", "javascript", "dart", "typescript", "go", "c_sharp", "python" },
         {
-          RGB = true,      -- #RGB hex codes
-          RRGGBB = true,   -- #RRGGBB hex codes
-          RRGGBBAA = true, -- #RRGGBBAA hex codes
-          rgb_fn = true,   -- CSS rgb() and rgba() functions
-          hsl_fn = true,   -- CSS hsl() and hsla() functions
-          css = true,      -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
-          css_fn = true,   -- Enable all CSS *functions*: rgb_fn, hsl_fn
+          rgb = true,      -- #rgb hex codes
+          rrggbb = true,   -- #rrggbb hex codes
+          rrggbbaa = true, -- #rrggbbaa hex codes
+          rgb_fn = true,   -- css rgb() and rgba() functions
+          hsl_fn = true,   -- css hsl() and hsla() functions
+          css = true,      -- enable all css features: rgb_fn, hsl_fn, names, rgb, rrggbb
+          css_fn = true,   -- enable all css *functions*: rgb_fn, hsl_fn
         }
       )
     end,
@@ -222,81 +225,95 @@ lvim.plugins = {
   --     })
   --   end
   -- },
-  -- {
-  --   "akinsho/flutter-tools.nvim",
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     "stevearc/dressing.nvim", -- optional for vim.ui.select
-  --   },
-  --   after = "mason-lspconfig.nvim",
-  --   config = function()
-  --     require("flutter-tools").setup({
-  --       lsp = {
-  --         skip_setup = { "dartls" },
-  --       },
-  --       widget_guides = {
-  --         enabled = true,
+  {
+    "dart-lang/dart-vim-plugin",
+    ft = { "dart" },
+    --[[ config = function() ]]
+    --require("dart-vim-plugin").setup({})
+    -- cấu hình format_on_save cho dart
+    -- vim.api.nvim_exec([[
+    --   augroup dart_format_on_save
+    --   autocmd!
+    --   autocmd bufwritepre *.dart :silent! dartfmt
+    --   augroup end
+    -- ]], false)
+    --[[ end ]]
+  },
+  {
+    "akinsho/flutter-tools.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "stevearc/dressing.nvim", -- optional for vim.ui.select
+    },
+    after = "mason-lspconfig.nvim",
+    config = function()
+      require("flutter-tools").setup({
+        -- lsp = {
+        --   skip_setup = { "dartls" },
+        -- },
+        widget_guides = {
+          enabled = true,
 
-  --       },
-  --       debugger = {
-  --         -- integrate with nvim dap + install dart code debugger
-  --         enabled = false,
-  --         run_via_dap = true, -- use dap instead of a plenary job to run flutter apps
-  --         -- if empty dap will not stop on any exceptions, otherwise it will stop on those specified
-  --         -- see |:help dap.set_exception_breakpoints()| for more info
-  --         exception_breakpoints = {},
-  --         register_configurations = function(_)
-  --           require("dap").adapters.dart = {
-  --             type = "executable",
-  --             command = "node",
-  --             args = { "C:/Users/minhg/Downloads/Development/Dart-Code/out/dist/debug.js", "flutter" }
-  --           }
+        },
+        debugger = {
+          -- integrate with nvim dap + install dart code debugger
+          enabled = false,
+          run_via_dap = true, -- use dap instead of a plenary job to run flutter apps
+          -- if empty dap will not stop on any exceptions, otherwise it will stop on those specified
+          -- see |::help dap.set_exception_breakpoints()help dap.set_exception_breakpoints()| for more info
+          exception_breakpoints = {},
+          register_configurations = function(_)
+            require("dap").adapters.dart = {
+              type = "executable",
+              command = "node",
+              args = { "C:/Users/minhg/Downloads/Development/Dart-Code/out/dist/debug.js", "flutter" }
+            }
 
-  --           require("dap").configurations.dart = {
-  --             {
-  --               type = "dart",
-  --               request = "launch",
-  --               name = "Launch flutter",
-  --               dartSdkPath = "C:/flutter/bin/cache/dart-sdk/",
-  --               flutterSdkPath = "C:/flutter",
-  --               program = "${workspaceFolder}/lib/main.dart",
-  --               cwd = "${workspaceFolder}",
-  --             }
+            require("dap").configurations.dart = {
+              {
+                type = "dart",
+                request = "launch",
+                name = "Launch flutter",
+                dartSdkPath = "C:/flutter/bin/cache/dart-sdk/",
+                flutterSdkPath = "C:/flutter",
+                program = "${workspaceFolder}/lib/main.dart",
+                cwd = "${workspaceFolder}",
+              }
 
-  --           }
-  --           require("dap").set_log_level("DEBUG")
-  --           -- require("dap").adapters.dart = {
-  --           --   type = "executable",
-  --           --   command = "node",
-  --           --   args = { "C:\\Users\\minhg\\Dart-Code\\out\\dist\\debug.js", "flutter" }
-  --           -- }
-  --         end,
-  --         flutter_path = "C:\\flutter", -- <-- this takes priority over the lookup
-  --         flutter_lookup_cmd = nil,     -- example "dirname $(which flutter)" or "asdf where flutter"
-  --         fvm = false,                  -- takes priority over path, uses <workspace>/.fvm/flutter_sdk if enabled
-  --         dev_log = {
-  --           enabled = true,
-  --           open_cmd = "tabedit", -- command to use to open the log buffer
-  --         },
-  --         dev_tools = {
-  --           autostart = true,         -- autostart devtools server if not detected
-  --           auto_open_browser = true, -- Automatically opens devtools in the browser
-  --         },
-  --         outline = {
-  --           open_cmd = "30vnew", -- command to use to open the outline buffer
-  --           auto_open = false    -- if true this will open the outline automatically when it is first populated
-  --         },
-  --         settings = {
-  --           showTodos = true,
-  --           completeFunctionCalls = true,
-  --           analysisExcludedFolders = { "C:\\flutter" },
-  --           renameFilesWithClasses = "prompt", -- "always"
-  --           enableSnippets = true,
-  --         }
-  --       }
-  --     })
-  --   end
-  -- },
+            }
+            require("dap").set_log_level("DEBUG")
+            -- require("dap").adapters.dart = {
+            --   type = "executable",
+            --   command = "node",
+            --   args = { "C:\\Users\\minhg\\Dart-Code\\out\\dist\\debug.js", "flutter" }
+            -- }
+          end,
+          flutter_path = "C:\\flutter", -- <-- this takes priority over the lookup
+          flutter_lookup_cmd = nil,     -- example "dirname $(which flutter)" or "asdf where flutter"
+          fvm = false,                  -- takes priority over path, uses <workspace>/.fvm/flutter_sdk if enabled
+          dev_log = {
+            enabled = true,
+            open_cmd = "tabedit", -- command to use to open the log buffer
+          },
+          dev_tools = {
+            autostart = true,         -- autostart devtools server if not detected
+            auto_open_browser = true, -- Automatically opens devtools in the browser
+          },
+          outline = {
+            open_cmd = "30vnew", -- command to use to open the outline buffer
+            auto_open = false    -- if true this will open the outline automatically when it is first populated
+          },
+          settings = {
+            showTodos = true,
+            completeFunctionCalls = true,
+            analysisExcludedFolders = { "C:\\flutter" },
+            renameFilesWithClasses = "prompt", -- "always"
+            enableSnippets = true,
+          }
+        }
+      })
+    end
+  },
   {
     "rcarriga/nvim-dap-ui",
     config = function()
@@ -457,20 +474,6 @@ lvim.plugins = {
       vim.g.rnvimr_pick_enable = 1
       vim.g.rnvimr_bw_enable = 1
     end,
-  },
-  {
-    "dart-lang/dart-vim-plugin",
-    ft = { "dart" },
-    --[[ config = function() ]]
-    --require("dart-vim-plugin").setup({})
-    -- Cấu hình format_on_save cho Dart
-    -- vim.api.nvim_exec([[
-    --   augroup dart_format_on_save
-    --   autocmd!
-    --   autocmd BufWritePre *.dart :silent! DartFmt
-    --   augroup END
-    -- ]], false)
-    --[[ end ]]
   },
 }
 

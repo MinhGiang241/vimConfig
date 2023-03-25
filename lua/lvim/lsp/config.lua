@@ -5,7 +5,7 @@ local skipped_servers = {
   "ccls",
   "csharp_ls",
   "cssmodules_ls",
-  "dartls",
+  -- "dartls",
   "denols",
   "docker_compose_language_service",
   "ember",
