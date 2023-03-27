@@ -61,7 +61,7 @@ lvim.builtin.alpha.mode = "dashboard"
 lvim.builtin.terminal.active = true
 lvim.builtin.nvimtree.setup.view.side = "left"
 lvim.builtin.nvimtree.setup.renderer.icons.show.git = false
-vim.opt.guifont = "monospace:h12"
+--[[ vim.opt.guifont = "monospace:h12" ]]
 lvim.keys.normal_mode["K"] = ":lua vim.lsp.buf.hover()<CR>"
 lvim.keys.normal_mode["gd"] = ":lua vim.lsp.buf.definition()<CR>"
 
@@ -257,7 +257,7 @@ lvim.plugins = {
         },
         debugger = {
           -- integrate with nvim dap + install dart code debugger
-          enabled = false,
+          enabled = true,
           run_via_dap = true, -- use dap instead of a plenary job to run flutter apps
           -- if empty dap will not stop on any exceptions, otherwise it will stop on those specified
           -- see |::help dap.set_exception_breakpoints()help dap.set_exception_breakpoints()| for more info
@@ -288,9 +288,9 @@ lvim.plugins = {
             --   args = { "C:\\Users\\minhg\\Dart-Code\\out\\dist\\debug.js", "flutter" }
             -- }
           end,
-          flutter_path = "C:\\flutter", -- <-- this takes priority over the lookup
-          flutter_lookup_cmd = nil,     -- example "dirname $(which flutter)" or "asdf where flutter"
-          fvm = false,                  -- takes priority over path, uses <workspace>/.fvm/flutter_sdk if enabled
+          flutter_path = "C:\\flutter\\bin\\flutter.bat", -- <-- this takes priority over the lookup
+          flutter_lookup_cmd = nil,                       -- example "dirname $(which flutter)" or "asdf where flutter"
+          fvm = false,                                    -- takes priority over path, uses <workspace>/.fvm/flutter_sdk if enabled
           dev_log = {
             enabled = true,
             open_cmd = "tabedit", -- command to use to open the log buffer
