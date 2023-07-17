@@ -8,6 +8,7 @@ local opts = {
         enable = true,
         url = "https://www.schemastore.org/api/json/catalog.json",
       },
+<<<<<<< HEAD
       schemas = {
         kubernetes = {
           "daemon.{yml,yaml}",
@@ -23,6 +24,9 @@ local opts = {
           "kubectl-edit*.yaml",
         },
       },
+=======
+      schemas = require("schemastore").yaml.schemas(),
+>>>>>>> 14b0878 (upgrade new lunar vim)
     },
   },
 }

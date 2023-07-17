@@ -17,13 +17,20 @@ end
 
 local skipped_filetypes = lvim.lsp.automatic_configuration.skipped_filetypes
 local skipped_servers = lvim.lsp.automatic_configuration.skipped_servers
+<<<<<<< HEAD
 local ensure_installed_servers = lvim.lsp.installer.setup.ensure_installed
+=======
+>>>>>>> 14b0878 (upgrade new lunar vim)
 
 ---Check if we should skip generating an ftplugin file based on the server_name
 ---@param server_name string name of a valid language server
 local function should_skip(server_name)
+<<<<<<< HEAD
   -- ensure_installed_servers should take priority over skipped_servers
   return vim.tbl_contains(skipped_servers, server_name) and not vim.tbl_contains(ensure_installed_servers, server_name)
+=======
+  return vim.tbl_contains(skipped_servers, server_name)
+>>>>>>> 14b0878 (upgrade new lunar vim)
 end
 
 ---Generates an ftplugin file based on the server_name in the selected directory

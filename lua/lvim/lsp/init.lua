@@ -95,13 +95,20 @@ function M.setup()
   end
 
   if lvim.use_icons then
+<<<<<<< HEAD
     for _, sign in ipairs(lvim.lsp.diagnostics.signs.values) do
+=======
+    for _, sign in ipairs(vim.tbl_get(vim.diagnostic.config(), "signs", "values") or {}) do
+>>>>>>> 14b0878 (upgrade new lunar vim)
       vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = sign.name })
     end
   end
 
+<<<<<<< HEAD
   require("lvim.lsp.handlers").setup()
 
+=======
+>>>>>>> 14b0878 (upgrade new lunar vim)
   if not utils.is_directory(lvim.lsp.templates_dir) then
     require("lvim.lsp.templates").generate_templates()
   end
@@ -113,6 +120,21 @@ function M.setup()
   require("lvim.lsp.null-ls").setup()
 
   autocmds.configure_format_on_save()
+<<<<<<< HEAD
+=======
+
+  local function set_handler_opts_if_not_set(name, handler, opts)
+    if debug.getinfo(vim.lsp.handlers[name], "S").source:find(vim.env.VIMRUNTIME, 1, true) then
+      vim.lsp.handlers[name] = vim.lsp.with(handler, opts)
+    end
+  end
+
+  set_handler_opts_if_not_set("textDocument/hover", vim.lsp.handlers.hover, { border = "rounded" })
+  set_handler_opts_if_not_set("textDocument/signatureHelp", vim.lsp.handlers.signature_help, { border = "rounded" })
+
+  -- Enable rounded borders in :LspInfo window.
+  require("lspconfig.ui.windows").default_options.border = "rounded"
+>>>>>>> 14b0878 (upgrade new lunar vim)
 end
 
 return M

@@ -82,7 +82,11 @@ M.config = function()
         floating = {
           max_height = 0.9,
           max_width = 0.5, -- Floats will be treated as percentage of your screen.
+<<<<<<< HEAD
           border = vim.g.border_chars, -- Border style. Can be 'single', 'double' or 'rounded'
+=======
+          border = "rounded",
+>>>>>>> 14b0878 (upgrade new lunar vim)
           mappings = {
             close = { "q", "<Esc>" },
           },

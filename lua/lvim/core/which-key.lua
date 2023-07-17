@@ -56,7 +56,11 @@ M.config = function()
         spacing = 3, -- spacing between columns
         align = "left", -- align columns left, center or right
       },
+<<<<<<< HEAD
       ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
+=======
+      ignore_missing = true, -- enable this to hide mappings for which you didn't specify a label
+>>>>>>> 14b0878 (upgrade new lunar vim)
       hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ " }, -- hide mapping boilerplate
       show_help = true, -- show help message on the command line when the popup is visible
       show_keys = true, -- show the currently pressed key and its label as a message in the command line
@@ -70,7 +74,11 @@ M.config = function()
         v = { "j", "k" },
       },
       -- disable the WhichKey popup for certain buf types and file types.
+<<<<<<< HEAD
       -- Disabled by deafult for Telescope
+=======
+      -- Disabled by default for Telescope
+>>>>>>> 14b0878 (upgrade new lunar vim)
       disable = {
         buftypes = {},
         filetypes = { "TelescopePrompt" },
@@ -97,6 +105,13 @@ M.config = function()
     -- see https://neovim.io/doc/user/map.html#:map-cmd
     vmappings = {
       ["/"] = { "<Plug>(comment_toggle_linewise_visual)", "Comment toggle linewise (visual)" },
+<<<<<<< HEAD
+=======
+      l = {
+        name = "LSP",
+        a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
+      },
+>>>>>>> 14b0878 (upgrade new lunar vim)
     },
     mappings = {
       [";"] = { "<cmd>Alpha<CR>", "Dashboard" },

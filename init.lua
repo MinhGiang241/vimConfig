@@ -5,7 +5,11 @@ local base_dir = vim.env.LUNARVIM_BASE_DIR
   end)()
 
 if not vim.tbl_contains(vim.opt.rtp:get(), base_dir) then
+<<<<<<< HEAD
   vim.opt.rtp:append(base_dir)
+=======
+  vim.opt.rtp:prepend(base_dir)
+>>>>>>> 14b0878 (upgrade new lunar vim)
 end
 
 require("lvim.bootstrap"):init(base_dir)

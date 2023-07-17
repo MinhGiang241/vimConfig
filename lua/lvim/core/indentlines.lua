@@ -28,7 +28,11 @@ M.config = function()
 end
 
 M.setup = function()
+<<<<<<< HEAD
   local status_ok, indent_blankline = pcall(reload, "indent_blankline")
+=======
+  local status_ok, indent_blankline = pcall(require, "indent_blankline")
+>>>>>>> 14b0878 (upgrade new lunar vim)
   if not status_ok then
     return
   end

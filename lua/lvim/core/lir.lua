@@ -100,7 +100,11 @@ function M.icon_setup()
 end
 
 function M.setup()
+<<<<<<< HEAD
   local status_ok, lir = pcall(reload, "lir")
+=======
+  local status_ok, lir = pcall(require, "lir")
+>>>>>>> 14b0878 (upgrade new lunar vim)
   if not status_ok then
     return
   end

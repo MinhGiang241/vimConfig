@@ -54,11 +54,38 @@ function M.handle()
   setmetatable(lvim.lsp.popup_border, mt)
 
   ---@deprecated
+<<<<<<< HEAD
+=======
+  lvim.lsp.float = {}
+  setmetatable(lvim.lsp.float, {
+    __newindex = function(_, k, _)
+      deprecate("lvim.lsp.float." .. k, "Use options provided by the handler instead")
+    end,
+  })
+
+  ---@deprecated
+  lvim.lsp.diagnostics = {}
+  setmetatable(lvim.lsp.diagnostics, {
+    __newindex = function(table, k, v)
+      deprecate("lvim.lsp.diagnostics." .. k, string.format("Use `vim.diagnostic.config({ %s = %s })` instead", k, v))
+      rawset(table, k, v)
+    end,
+  })
+
+  ---@deprecated
+>>>>>>> 14b0878 (upgrade new lunar vim)
   lvim.lang = {}
   setmetatable(lvim.lang, mt)
 end
 
 function M.post_load()
+<<<<<<< HEAD
+=======
+  if lvim.lsp.diagnostics and not vim.tbl_isempty(lvim.lsp.diagnostics) then
+    vim.diagnostic.config(lvim.lsp.diagnostics)
+  end
+
+>>>>>>> 14b0878 (upgrade new lunar vim)
   if lvim.lsp.override and not vim.tbl_isempty(lvim.lsp.override) then
     deprecate("lvim.lsp.override", "Use `lvim.lsp.automatic_configuration.skipped_servers` instead")
     vim.tbl_map(function(c)
@@ -90,6 +117,7 @@ function M.post_load()
       run = "build",
       lock = "pin",
       tag = "version",
+<<<<<<< HEAD
     }
 
     alternatives.requires = function()
@@ -102,6 +130,11 @@ function M.post_load()
       return "Use `dependencies` instead"
     end
 
+=======
+      requires = "dependencies",
+    }
+
+>>>>>>> 14b0878 (upgrade new lunar vim)
     alternatives.disable = function()
       if type(spec.disabled) == "function" then
         spec.enabled = function()
@@ -110,17 +143,29 @@ function M.post_load()
       else
         spec.enabled = not spec.disabled
       end
+<<<<<<< HEAD
       return "Use `enabled` instead"
     end
 
     alternatives.wants = function()
       return "It's not needed in most cases, otherwise use `dependencies`."
+=======
+      return "enabled = " .. vim.inspect(spec.enabled)
+    end
+
+    alternatives.wants = function()
+      return "dependencies = [value]"
+>>>>>>> 14b0878 (upgrade new lunar vim)
     end
     alternatives.needs = alternatives.wants
 
     alternatives.module = function()
       spec.lazy = true
+<<<<<<< HEAD
       return "Use `lazy = true` instead."
+=======
+      return "lazy = true"
+>>>>>>> 14b0878 (upgrade new lunar vim)
     end
 
     for old_key, alternative in pairs(alternatives) do
@@ -134,18 +179,62 @@ function M.post_load()
         end
         spec[old_key] = nil
 
+<<<<<<< HEAD
         message = message or string.format("Use `%s` instead.", alternative)
         deprecate(
           string.format("%s` in `lvim.plugins", old_key),
           message .. " See https://github.com/folke/lazy.nvim#-migration-guide"
         )
+=======
+        local new_value = vim.inspect(spec[alternative] or "[value]")
+        message = message or string.format("%s = %s", alternative, new_value)
+        vim.schedule(function()
+          vim.notify_once(
+            string.format(
+              [[`%s` in `lvim.plugins` has been deprecated since the migration to lazy.nvim. Use `%s` instead.
+Example:
+`lvim.plugins = {... {... %s = %s ...} ...}`
+->
+`lvim.plugins = {... {... %s ...} ...}`
+See https://github.com/folke/lazy.nvim#-migration-guide"]],
+              old_key,
+              message,
+              old_key,
+              new_value,
+              message
+            ),
+            vim.log.levels.WARN
+          )
+        end)
+>>>>>>> 14b0878 (upgrade new lunar vim)
       end
     end
 
     if spec[1] and spec[1]:match "^http" then
       spec.url = spec[1]
       spec[1] = nil
+<<<<<<< HEAD
       deprecate("{ 'http...' }` in `lvim.plugins", "Use { url = 'http...' } instead.")
+=======
+
+      vim.schedule(function()
+        vim.notify_once(
+
+          string.format(
+            [[`"http..."` in `lvim.plugins` has been deprecated since the migration to lazy.nvim. Use `url = "http..."` instead.
+Example:
+`lvim.plugins = {... { "%s" ...} ...}`
+->
+`lvim.plugins = {... { url = "%s" ...} ...}`
+See https://github.com/folke/lazy.nvim#-migration-guide"]],
+            spec.url,
+            spec.url
+          ),
+
+          vim.log.levels.WARN
+        )
+      end)
+>>>>>>> 14b0878 (upgrade new lunar vim)
     end
   end
 

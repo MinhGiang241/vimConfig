@@ -123,13 +123,21 @@ function M.load_defaults()
       "BufEnter",
       {
         group = "_dir_opened",
+<<<<<<< HEAD
         once = true,
+=======
+        nested = true,
+>>>>>>> 14b0878 (upgrade new lunar vim)
         callback = function(args)
           local bufname = vim.api.nvim_buf_get_name(args.buf)
           if require("lvim.utils").is_directory(bufname) then
             vim.api.nvim_del_augroup_by_name "_dir_opened"
             vim.cmd "do User DirOpened"
+<<<<<<< HEAD
             vim.api.nvim_exec_autocmds("BufEnter", {})
+=======
+            vim.api.nvim_exec_autocmds(args.event, { buffer = args.buf, data = args.data })
+>>>>>>> 14b0878 (upgrade new lunar vim)
           end
         end,
       },
@@ -138,10 +146,18 @@ function M.load_defaults()
       { "BufRead", "BufWinEnter", "BufNewFile" },
       {
         group = "_file_opened",
+<<<<<<< HEAD
         once = true,
         callback = function(args)
           local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
           if not (vim.fn.expand "%" == "" or buftype == "nofile") then
+=======
+        nested = true,
+        callback = function(args)
+          local buftype = vim.api.nvim_get_option_value("buftype", { buf = args.buf })
+          if not (vim.fn.expand "%" == "" or buftype == "nofile") then
+            vim.api.nvim_del_augroup_by_name "_file_opened"
+>>>>>>> 14b0878 (upgrade new lunar vim)
             vim.cmd "do User FileOpened"
             require("lvim.lsp").setup()
           end

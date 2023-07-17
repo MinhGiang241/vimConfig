@@ -32,7 +32,11 @@ M.defaults = {
   {
     name = "LvimDocs",
     fn = function()
+<<<<<<< HEAD
       local documentation_url = "https://www.lunarvim.org/docs/quick-start"
+=======
+      local documentation_url = "https://www.lunarvim.org/docs/beginners-guide"
+>>>>>>> 14b0878 (upgrade new lunar vim)
       if vim.fn.has "mac" == 1 or vim.fn.has "macunix" == 1 then
         vim.fn.execute("!open " .. documentation_url)
       elseif vim.fn.has "win32" == 1 or vim.fn.has "win64" == 1 then

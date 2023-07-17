@@ -655,4 +655,8 @@ lvim.plugins = {
 --     -- let treesitter use bash highlight for zsh files as well
 --     require("nvim-treesitter.highlight").attach(0, "bash")
 --   end,
+<<<<<<< HEAD
 -- })
+=======
+-- })
+>>>>>>> 14b0878 (upgrade new lunar vim)
