@@ -2,7 +2,6 @@ local skipped_servers = {
   "angularls",
   "ansiblels",
   "antlersls",
-<<<<<<< HEAD
   "ccls",
   "csharp_ls",
   "cssmodules_ls",
@@ -10,17 +9,6 @@ local skipped_servers = {
   "denols",
   "docker_compose_language_service",
   "ember",
-=======
-  "azure_pipelines_ls",
-  "ccls",
-  "custom_elements_ls",
-  "omnisharp",
-  "cssmodules_ls",
-  "denols",
-  "docker_compose_language_service",
-  "ember",
-  "emmet_language_server",
->>>>>>> 14b0878 (upgrade new lunar vim)
   "emmet_ls",
   "eslint",
   "eslintls",
@@ -28,10 +16,6 @@ local skipped_servers = {
   "golangci_lint_ls",
   "gradle_ls",
   "graphql",
-<<<<<<< HEAD
-=======
-  "java_language_server",
->>>>>>> 14b0878 (upgrade new lunar vim)
   "jedi_language_server",
   "ltex",
   "neocmake",
@@ -39,39 +23,23 @@ local skipped_servers = {
   "phpactor",
   "psalm",
   "pylsp",
-<<<<<<< HEAD
-=======
-  "pylyzer",
->>>>>>> 14b0878 (upgrade new lunar vim)
   "pyre",
   "quick_lint_js",
   "reason_ls",
   "rnix",
   "rome",
   "ruby_ls",
-<<<<<<< HEAD
-=======
-  "rubocop",
->>>>>>> 14b0878 (upgrade new lunar vim)
   "ruff_lsp",
   "scry",
   "solang",
   "solc",
   "solidity_ls",
-<<<<<<< HEAD
-=======
-  "solidity_ls_nomicfoundation",
->>>>>>> 14b0878 (upgrade new lunar vim)
   "sorbet",
   "sourcekit",
   "sourcery",
   "spectral",
   "sqlls",
   "sqls",
-<<<<<<< HEAD
-=======
-  "standardrb",
->>>>>>> 14b0878 (upgrade new lunar vim)
   "stylelint_lsp",
   "svlangserver",
   "tflint",
@@ -87,7 +55,6 @@ local join_paths = require("lvim.utils").join_paths
 
 return {
   templates_dir = join_paths(get_runtime_dir(), "site", "after", "ftplugin"),
-<<<<<<< HEAD
   diagnostics = {
     signs = {
       active = true,
@@ -125,12 +92,6 @@ return {
     style = "minimal",
     border = "rounded",
   },
-=======
-  ---@deprecated use vim.diagnostic.config({ ... }) instead
-  diagnostics = {},
-  document_highlight = false,
-  code_lens_refresh = true,
->>>>>>> 14b0878 (upgrade new lunar vim)
   on_attach_callback = nil,
   on_init_callback = nil,
   automatic_configuration = {
@@ -142,32 +103,16 @@ return {
   buffer_mappings = {
     normal_mode = {
       ["K"] = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Show hover" },
-<<<<<<< HEAD
       ["gd"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Goto Definition" },
       ["gD"] = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Goto declaration" },
-=======
-      ["gd"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Goto definition" },
-      ["gD"] = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Goto Declaration" },
->>>>>>> 14b0878 (upgrade new lunar vim)
       ["gr"] = { "<cmd>lua vim.lsp.buf.references()<cr>", "Goto references" },
       ["gI"] = { "<cmd>lua vim.lsp.buf.implementation()<cr>", "Goto Implementation" },
       ["gs"] = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "show signature help" },
       ["gl"] = {
         function()
-<<<<<<< HEAD
           local config = lvim.lsp.diagnostics.float
           config.scope = "line"
           vim.diagnostic.open_float(0, config)
-=======
-          local float = vim.diagnostic.config().float
-
-          if float then
-            local config = type(float) == "table" and float or {}
-            config.scope = "line"
-
-            vim.diagnostic.open_float(config)
-          end
->>>>>>> 14b0878 (upgrade new lunar vim)
         end,
         "Show line diagnostics",
       },

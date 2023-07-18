@@ -11,30 +11,19 @@ function M.config()
       hijack_cursor = false,
       hijack_netrw = true,
       hijack_unnamed_buffer_when_opening = false,
-<<<<<<< HEAD
       ignore_buffer_on_setup = false,
-=======
->>>>>>> 14b0878 (upgrade new lunar vim)
       sort_by = "name",
       root_dirs = {},
       prefer_startup_root = false,
       sync_root_with_cwd = true,
       reload_on_bufenter = false,
       respect_buf_cwd = false,
-<<<<<<< HEAD
       on_attach = "disable",
-=======
-      on_attach = "default",
->>>>>>> 14b0878 (upgrade new lunar vim)
       remove_keymaps = false,
       select_prompts = false,
       view = {
         adaptive_size = false,
-<<<<<<< HEAD
         centralize_selection = false,
-=======
-        centralize_selection = true,
->>>>>>> 14b0878 (upgrade new lunar vim)
         width = 30,
         hide_root_folder = false,
         side = "left",
@@ -42,13 +31,10 @@ function M.config()
         number = false,
         relativenumber = false,
         signcolumn = "yes",
-<<<<<<< HEAD
         mappings = {
           custom_only = false,
           list = {},
         },
-=======
->>>>>>> 14b0878 (upgrade new lunar vim)
         float = {
           enable = false,
           quit_on_focus_loss = true,
@@ -241,7 +227,6 @@ function M.config()
   }
 end
 
-<<<<<<< HEAD
 function M.setup()
   local status_ok, nvim_tree = pcall(require, "nvim-tree")
   if not status_ok then
@@ -290,8 +275,6 @@ function M.setup()
   end
 end
 
-=======
->>>>>>> 14b0878 (upgrade new lunar vim)
 function M.start_telescope(telescope_mode)
   local node = require("nvim-tree.lib").get_node_at_cursor()
   local abspath = node.link_to or node.absolute_path
@@ -302,66 +285,4 @@ function M.start_telescope(telescope_mode)
   }
 end
 
-<<<<<<< HEAD
-=======
-local function on_attach(bufnr)
-  local api = require "nvim-tree.api"
-
-  local function telescope_find_files(_)
-    require("lvim.core.nvimtree").start_telescope "find_files"
-  end
-
-  local function telescope_live_grep(_)
-    require("lvim.core.nvimtree").start_telescope "live_grep"
-  end
-
-  local function opts(desc)
-    return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-  end
-
-  api.config.mappings.default_on_attach(bufnr)
-
-  local useful_keys = {
-    ["l"] = { api.node.open.edit, opts "Open" },
-    ["o"] = { api.node.open.edit, opts "Open" },
-    ["<CR>"] = { api.node.open.edit, opts "Open" },
-    ["v"] = { api.node.open.vertical, opts "Open: Vertical Split" },
-    ["h"] = { api.node.navigate.parent_close, opts "Close Directory" },
-    ["C"] = { api.tree.change_root_to_node, opts "CD" },
-    ["gtg"] = { telescope_live_grep, opts "Telescope Live Grep" },
-    ["gtf"] = { telescope_find_files, opts "Telescope Find File" },
-  }
-
-  require("lvim.keymappings").load_mode("n", useful_keys)
-end
-
-function M.setup()
-  local status_ok, nvim_tree = pcall(require, "nvim-tree")
-
-  if not status_ok then
-    Log:error "Failed to load nvim-tree"
-    return
-  end
-
-  -- Implicitly update nvim-tree when project module is active
-  if lvim.builtin.project.active then
-    lvim.builtin.nvimtree.setup.respect_buf_cwd = true
-    lvim.builtin.nvimtree.setup.update_cwd = true
-    lvim.builtin.nvimtree.setup.update_focused_file.enable = true
-    lvim.builtin.nvimtree.setup.update_focused_file.update_cwd = true
-  end
-
-  -- Add useful keymaps
-  if lvim.builtin.nvimtree.setup.on_attach == "default" then
-    lvim.builtin.nvimtree.setup.on_attach = on_attach
-  end
-
-  nvim_tree.setup(lvim.builtin.nvimtree.setup)
-
-  if lvim.builtin.nvimtree.on_config_done then
-    lvim.builtin.nvimtree.on_config_done(nvim_tree)
-  end
-end
-
->>>>>>> 14b0878 (upgrade new lunar vim)
 return M

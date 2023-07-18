@@ -39,7 +39,6 @@ function plugin_loader.init(opts)
       }
     end
 
-<<<<<<< HEAD
     vim.schedule(function()
       require("lvim.lsp").setup()
     end)
@@ -47,24 +46,6 @@ function plugin_loader.init(opts)
 
   vim.opt.runtimepath:append(lazy_install_dir)
   vim.opt.runtimepath:append(join_paths(plugins_dir, "*"))
-=======
-    vim.api.nvim_create_autocmd("User", { pattern = "LazyDone", callback = require("lvim.lsp").setup })
-  end
-
-  local rtp = vim.opt.rtp:get()
-  local base_dir = (vim.env.LUNARVIM_BASE_DIR or get_runtime_dir() .. "/lvim"):gsub("\\", "/")
-  local idx_base = #rtp + 1
-  for i, path in ipairs(rtp) do
-    path = path:gsub("\\", "/")
-    if path == base_dir then
-      idx_base = i + 1
-      break
-    end
-  end
-  table.insert(rtp, idx_base, lazy_install_dir)
-  table.insert(rtp, idx_base + 1, join_paths(plugins_dir, "*"))
-  vim.opt.rtp = rtp
->>>>>>> 14b0878 (upgrade new lunar vim)
 
   pcall(function()
     -- set a custom path for lazy's cache
@@ -112,7 +93,6 @@ function plugin_loader.load(configurations)
   vim.opt.runtimepath:remove(join_paths(plugins_dir, "*"))
 
   local status_ok = xpcall(function()
-<<<<<<< HEAD
     local opts = {
       install = {
         missing = true,
@@ -141,10 +121,6 @@ function plugin_loader.load(configurations)
     }
 
     lazy.setup(configurations, opts)
-=======
-    table.insert(lvim.lazy.opts.install.colorscheme, 1, lvim.colorscheme)
-    lazy.setup(configurations, lvim.lazy.opts)
->>>>>>> 14b0878 (upgrade new lunar vim)
   end, debug.traceback)
 
   if not status_ok then

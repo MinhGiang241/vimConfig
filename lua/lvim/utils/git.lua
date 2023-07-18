@@ -21,11 +21,7 @@ local function git_cmd(opts)
     on_stderr = function(_, data)
       table.insert(stderr, data)
     end,
-<<<<<<< HEAD
   }):sync()
-=======
-  }):sync(10000)
->>>>>>> 14b0878 (upgrade new lunar vim)
 
   if not vim.tbl_isempty(stderr) then
     Log:debug(stderr)

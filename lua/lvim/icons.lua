@@ -11,11 +11,7 @@ return {
     Event = "",
     Field = "",
     File = "",
-<<<<<<< HEAD
     Folder = "",
-=======
-    Folder = "󰉋",
->>>>>>> 14b0878 (upgrade new lunar vim)
     Function = "",
     Interface = "",
     Key = "",
@@ -23,11 +19,7 @@ return {
     Method = "",
     Module = "",
     Namespace = "",
-<<<<<<< HEAD
     Null = "ﳠ",
-=======
-    Null = "󰟢",
->>>>>>> 14b0878 (upgrade new lunar vim)
     Number = "",
     Object = "",
     Operator = "",
@@ -77,7 +69,6 @@ return {
     Bug = "",
     Stacks = "",
     Scopes = "",
-<<<<<<< HEAD
     Watches = "",
     DebugConsole = "",
     Calendar = "",
@@ -89,19 +80,6 @@ return {
     ChevronShortUp = "",
     Circle = "",
     Close = "",
-=======
-    Watches = "󰂥",
-    DebugConsole = "",
-    Calendar = "",
-    Check = "",
-    ChevronRight = "",
-    ChevronShortDown = "",
-    ChevronShortLeft = "",
-    ChevronShortRight = "",
-    ChevronShortUp = "",
-    Circle = " ",
-    Close = "󰅖",
->>>>>>> 14b0878 (upgrade new lunar vim)
     CloudDownload = "",
     Code = "",
     Comment = "",
@@ -115,17 +93,10 @@ return {
     File = "",
     FileSymlink = "",
     Files = "",
-<<<<<<< HEAD
     FindFile = "",
     FindText = "",
     Fire = "",
     Folder = "",
-=======
-    FindFile = "󰈞",
-    FindText = "󰊄",
-    Fire = "",
-    Folder = "󰉋",
->>>>>>> 14b0878 (upgrade new lunar vim)
     FolderOpen = "",
     FolderSymlink = "",
     Forward = "",
@@ -139,31 +110,19 @@ return {
     NewFile = "",
     Note = "",
     Package = "",
-<<<<<<< HEAD
     Pencil = "",
-=======
-    Pencil = "󰏫",
->>>>>>> 14b0878 (upgrade new lunar vim)
     Plus = "",
     Project = "",
     Search = "",
     SignIn = "",
     SignOut = "",
-<<<<<<< HEAD
     Tab = "",
-=======
-    Tab = "󰌒",
->>>>>>> 14b0878 (upgrade new lunar vim)
     Table = "",
     Target = "󰀘",
     Telescope = "",
     Text = "",
     Tree = "",
-<<<<<<< HEAD
     Triangle = "契",
-=======
-    Triangle = "󰐊",
->>>>>>> 14b0878 (upgrade new lunar vim)
     TriangleShortArrowDown = "",
     TriangleShortArrowLeft = "",
     TriangleShortArrowRight = "",
@@ -179,20 +138,12 @@ return {
     BoldQuestion = "",
     Question = "",
     BoldHint = "",
-<<<<<<< HEAD
     Hint = "",
-=======
-    Hint = "󰌶",
->>>>>>> 14b0878 (upgrade new lunar vim)
     Debug = "",
     Trace = "✎",
   },
   misc = {
-<<<<<<< HEAD
     Robot = "ﮧ",
-=======
-    Robot = "󰚩",
->>>>>>> 14b0878 (upgrade new lunar vim)
     Squirrel = "",
     Tag = "",
     Watch = "",

@@ -6,11 +6,7 @@ function M.config()
     on_config_done = nil,
 
     -- A list of parser names, or "all"
-<<<<<<< HEAD
     ensure_installed = {},
-=======
-    ensure_installed = { "comment", "markdown_inline", "regex" },
->>>>>>> 14b0878 (upgrade new lunar vim)
 
     -- List of parsers to ignore installing (for "all")
     ignore_install = {},

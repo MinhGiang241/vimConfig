@@ -234,11 +234,7 @@ function setup_lvim() {
 function validate_lunarvim_files() {
     Set-Alias lvim "$INSTALL_PREFIX\bin\lvim.ps1"
     try {
-<<<<<<< HEAD
         $verify_version_cmd="if v:errmsg != `"`" | cquit | else | quit | endif"
-=======
-        $verify_version_cmd="if !empty(v:errmsg) | cquit | else | quit | endif"
->>>>>>> 14b0878 (upgrade new lunar vim)
         Invoke-Command -ScriptBlock { lvim --headless -c 'LvimUpdate' -c "$verify_version_cmd" } -ErrorAction SilentlyContinue
     }
     catch {

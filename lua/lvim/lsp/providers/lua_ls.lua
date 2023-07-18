@@ -5,10 +5,6 @@ local default_workspace = {
     require("neodev.config").types(),
     "${3rd}/busted/library",
     "${3rd}/luassert/library",
-<<<<<<< HEAD
-=======
-    "${3rd}/luv/library",
->>>>>>> 14b0878 (upgrade new lunar vim)
   },
 
   maxPreload = 5000,

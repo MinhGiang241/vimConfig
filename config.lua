@@ -46,6 +46,7 @@ lvim.format_on_save = {
 lvim.leader = "space"
 
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
+lvim.builtin.which_key.setup.plugins.presets.z = true
 
 -- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
 -- lvim.keys.normal_mode["<S-h>"] = ":BufferLineCyclePrev<CR>"
@@ -654,8 +655,4 @@ lvim.plugins = {
 --     -- let treesitter use bash highlight for zsh files as well
 --     require("nvim-treesitter.highlight").attach(0, "bash")
 --   end,
-<<<<<<< HEAD
 -- })
-=======
--- })
->>>>>>> 14b0878 (upgrade new lunar vim)

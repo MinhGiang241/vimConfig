@@ -38,11 +38,7 @@ M.config = function()
     options = {
       icons = {
         Array = icons.Array .. " ",
-<<<<<<< HEAD
         Boolean = icons.Boolean,
-=======
-        Boolean = icons.Boolean .. " ",
->>>>>>> 14b0878 (upgrade new lunar vim)
         Class = icons.Class .. " ",
         Color = icons.Color .. " ",
         Constant = icons.Constant .. " ",
@@ -213,7 +209,6 @@ end
 
 M.create_winbar = function()
   vim.api.nvim_create_augroup("_winbar", {})
-<<<<<<< HEAD
   if vim.fn.has "nvim-0.8" == 1 then
     vim.api.nvim_create_autocmd({
       "CursorHoldI",
@@ -237,29 +232,6 @@ M.create_winbar = function()
       end,
     })
   end
-=======
-  vim.api.nvim_create_autocmd({
-    "CursorHoldI",
-    "CursorHold",
-    "BufWinEnter",
-    "BufFilePost",
-    "InsertEnter",
-    "BufWritePost",
-    "TabClosed",
-    "TabEnter",
-  }, {
-    group = "_winbar",
-    callback = function()
-      if lvim.builtin.breadcrumbs.active then
-        local status_ok, _ = pcall(vim.api.nvim_buf_get_var, 0, "lsp_floating_window")
-        if not status_ok then
-          -- TODO:
-          require("lvim.core.breadcrumbs").get_winbar()
-        end
-      end
-    end,
-  })
->>>>>>> 14b0878 (upgrade new lunar vim)
 end
 
 return M

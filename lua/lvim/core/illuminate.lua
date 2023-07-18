@@ -54,11 +54,7 @@ M.config = function()
 end
 
 M.setup = function()
-<<<<<<< HEAD
   local status_ok, illuminate = pcall(reload, "illuminate")
-=======
-  local status_ok, illuminate = pcall(require, "illuminate")
->>>>>>> 14b0878 (upgrade new lunar vim)
   if not status_ok then
     return
   end
