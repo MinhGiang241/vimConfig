@@ -103,8 +103,29 @@ lvim.autocommands = {
 }
 
 
+
+
 local dap = require "dap"
 local dapui = require "dapui"
+local lspconfig = require "lspconfig"
+local util = require "lspconfig/util"
+
+lspconfig.gopls.setup {
+  on_attach = require('lvim.lsp.config').on_attach,
+  capabilities = require("lvim.lsp.config").capabilities,
+  cmd = { "gopls" },
+  filetypes = { "go", "gomod", "gowork", "gotmpl" },
+  root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+  settings = {
+    gopls = {
+      completeUnimported = true,
+      usePlaceholders = true,
+      analyses = {
+        unusedparams = true,
+      }
+    }
+  }
+}
 
 require("dapui").setup({
   icons = { expanded = "▾", collapsed = "▸" },
@@ -285,9 +306,9 @@ lvim.plugins = {
   --}
   {
     "fatih/vim-go",
-    config = function()
-      require("vim-go").setup()
-    end
+    -- config = function()
+    --   require("vim-go").setup()
+    -- end
   },
 
   {
@@ -343,7 +364,10 @@ lvim.plugins = {
     config = function()
       require("nvim-ts-autotag").setup({
         filetypes = {
-          'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact', 'svelte', 'vue', 'tsx', 'jsx',
+          "gotmpl", 'gohtmltmpl', 'tmpl', 'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
+          'svelte',
+          'vue', 'tsx',
+          'jsx',
           'rescript',
           'xml',
           'php',
