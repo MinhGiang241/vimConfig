@@ -170,8 +170,8 @@ M.config = function()
       m = {
         name = "MiniMap",
         t = { "<cmd>lua MiniMap.toggle()<cr>", "Toggle MiniMap" },
-        f = { "<cmd>lua MiniMap.toggle_focus()<cr>", "Toggle focus" },
-        s = { "<cmd>lua MiniMap.toggle_side()<cr>", "Toggle side" }
+        f = { "<cmd>lua MiniMap.toggle_focus()<cr>", "Toggle Focus" },
+        s = { "<cmd>lua MiniMap.toggle_side()<cr>", "Toggle Side" }
       },
 
       -- " Available Debug Adapters:
