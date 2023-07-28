@@ -179,10 +179,23 @@ require("dapui").setup({
   },
   windows = { indent = 1 },
   render = {
+    indent          = 1,
     max_type_length = nil, -- Can be integer or nil.
   }
 })
 
+dap.set_log_level("DEBUG")
+
+-- dap.adapters["pwa-node"] = {
+--   type = "server",
+--   host = "localhost",
+--   port = "${port}",
+--   executable = {
+--     command = "node",
+--     -- 💀 Make sure to update this path to point to your C:/Users/minhg/Downloads/Development/vscode-chrome-debug/out/src/installation
+--     args = { "C:/Users/minhg/Downloads/Development/js-debug/src/dapDebugServer.js", "${port}" },
+--   }
+-- }
 
 dap.adapters.chrome = {
   type = "executable",
@@ -190,9 +203,30 @@ dap.adapters.chrome = {
   args = { "C:/Users/minhg/Downloads/Development/vscode-chrome-debug/out/src/chromeDebug.js" } -- TODO adjust
 }
 
+dap.configurations.javascript = {
+  {
+    type = "pwa-node",
+    request = "launch",
+    name = "Launch file",
+    program = "${file}",
+    cwd = "${workspaceFolder}",
+  },
+}
+
+dap.configurations.typescript = {
+  {
+    type = "pwa-node",
+    request = "launch",
+    name = "Launch file",
+    program = "${file}",
+    cwd = "${workspaceFolder}",
+  },
+}
+
 dap.configurations.javascriptreact = { -- change this to javascript if needed
   {
     type = "chrome",
+    name = 'Chrome',
     request = "attach",
     program = "${file}",
     cwd = vim.fn.getcwd(),
@@ -200,12 +234,58 @@ dap.configurations.javascriptreact = { -- change this to javascript if needed
     protocol = "inspector",
     port = 9222,
     webRoot = "${workspaceFolder}"
-  }
+  },
+  {
+    type = "pwa-node",
+    request = "launch",
+    name = "Launch file",
+    program = "${file}",
+    cwd = "${workspaceFolder}",
+
+  },
+  {
+    -- use nvim-dap-vscode-js's pwa-node debug adapter
+    type = "pwa-node",
+    -- attach to an already running node process with --inspect flag
+    -- default port: 9222
+    request = "attach",
+    -- allows us to pick the process using a picker
+    processId = require 'dap.utils'.pick_process,
+    -- name of the debug action
+    name = "Attach debugger to existing `node --inspect` process",
+    -- for compiled languages like TypeScript or Svelte.js
+    sourceMaps = true,
+    -- resolve source maps in nested locations while ignoring node_modules
+    resolveSourceMapLocations = { "${workspaceFolder}/**",
+      "!**/node_modules/**" },
+    -- path to src in vite based projects (and most other projects as well)
+    cwd = "${workspaceFolder}/src",
+    -- we don't want to debug code inside node_modules, so skip it!
+    skipFiles = { "${workspaceFolder}/node_modules/**/*.js" },
+
+  },
+  {
+    -- use nvim-dap-vscode-js's pwa-chrome debug adapter
+    type = "pwa-chrome",
+    request = "launch",
+    -- name of the debug action
+    name = "Launch Chrome to debug client side code",
+    -- default vite dev server url
+    url = "http://localhost:3000",
+    -- for TypeScript/Svelte
+    sourceMaps = true,
+    webRoot = "${workspaceFolder}/src",
+    protocol = "inspector",
+    port = 9222,
+    -- skip files from vite's hmr
+    skipFiles = { "**/node_modules/**/*", "**/@vite/*", "**/src/client/*", "**/src/*" },
+  },
 }
 
 dap.configurations.typescriptreact = { -- change to typescript if needed
   {
     type = "chrome",
+    name = 'Chrome',
     request = "attach",
     program = "${file}",
     cwd = vim.fn.getcwd(),
@@ -213,7 +293,52 @@ dap.configurations.typescriptreact = { -- change to typescript if needed
     protocol = "inspector",
     port = 9222,
     webRoot = "${workspaceFolder}"
-  }
+  },
+  {
+    type = "pwa-node",
+    request = "launch",
+    name = "Launch file",
+    program = "${file}",
+    cwd = "${workspaceFolder}",
+  },
+  {
+    -- use nvim-dap-vscode-js's pwa-node debug adapter
+    type = "pwa-node",
+    -- attach to an already running node process with --inspect flag
+    -- default port: 9222
+    request = "attach",
+    -- allows us to pick the process using a picker
+    processId = require 'dap.utils'.pick_process,
+    -- name of the debug action
+    name = "Attach debugger to existing `node --inspect` process",
+    -- for compiled languages like TypeScript or Svelte.js
+    sourceMaps = true,
+    -- resolve source maps in nested locations while ignoring node_modules
+    resolveSourceMapLocations = { "${workspaceFolder}/**",
+      "!**/node_modules/**" },
+    -- path to src in vite based projects (and most other projects as well)
+    cwd = "${workspaceFolder}/src",
+    -- we don't want to debug code inside node_modules, so skip it!
+    skipFiles = { "${workspaceFolder}/node_modules/**/*.js" },
+
+  },
+  {
+    -- use nvim-dap-vscode-js's pwa-chrome debug adapter
+    type = "pwa-chrome",
+    request = "launch",
+    -- name of the debug action
+    name = "Launch Chrome to debug client side code",
+    -- default vite dev server url
+    url = "http://localhost:3000",
+    -- for TypeScript/Svelte
+    sourceMaps = true,
+    webRoot = "${workspaceFolder}/src",
+    protocol = "inspector",
+    port = 9222,
+    -- skip files from vite's hmr
+    skipFiles = { "**/node_modules/**/*", "**/@vite/*", "**/src/client/*", "**/src/*" },
+  },
+
 }
 
 
@@ -266,7 +391,7 @@ dap.configurations.cs = {
 -- ---`:LvimInfo` lists which server(s) are skipped for the current filetype
 -- lvim.lsp.automatic_configuration.skipped_servers = vim.tbl_filter(function(server)
 --   return server ~= "emmet_ls"
--- end, lvim.lsp.automatic_configuration.skipped_servers)
+-- enlvim.lsp.automatic_configuration.skipped_servers)
 
 -- -- you can set a custom on_attach function that will be used for all the language servers
 -- -- See <https://github.com/neovim/nvim-lspconfig#keybindings-and-completion>
@@ -305,6 +430,32 @@ lvim.plugins = {
   --
   --}
   {
+    "microsoft/vscode-js-debug",
+    config = function()
+      require("dap-vscode-js").setup({
+        -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
+        -- debugger_path = "(runtimedir)/site/pack/packer/opt/vscode-js-debug", -- Path to vscode-js-debug installation.
+        -- debugger_cmd = { "js-debug-adapter" }, -- Command to use to launch the debug server. Takes precedence over `node_path` and `debugger_path`.
+        adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
+        -- log_file_path = "(stdpath cache)/dap_vscode_js.log" -- Path for file logging
+        -- log_file_level = false -- Logging level for output to file. Set to false to disable file logging.
+        -- log_console_level = vim.log.levels.ERROR -- Logging level for output to console. Set to false to disable console output.
+      })
+
+      for _, language in ipairs({ "typescript", "javascript" }) do
+        require("dap").configurations[language] = {
+          type = "pwa-node",
+          request = "attach",
+          name = "Attach",
+          processId = require 'dap.utils'.pick_process,
+          cwd = "${workspaceFolder}",
+        }
+      end
+    end,
+    opt = true,
+    run = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out"
+  },
+  {
     "stevearc/dressing.nvim",
     opts = {},
   },
@@ -329,7 +480,7 @@ lvim.plugins = {
         },
         -- you can enable a preset for easier configuration
         presets = {
-          bottom_search = true,         -- use a classic bottom cmdline for search
+          bottom_search = false,        -- use a classic bottom cmdline for search
           command_palette = true,       -- position the cmdline and popupmenu together
           long_message_to_split = true, -- long messages will be sent to a split
           inc_rename = false,           -- enables an input dialog for inc-rename.nvim
