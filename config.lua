@@ -110,6 +110,11 @@ local dapui = require "dapui"
 local lspconfig = require "lspconfig"
 local util = require "lspconfig/util"
 
+-- lspconfig.powershell_es.setup {
+--   bundle_path = 'C:/Users/minhg/Downloads/Development/PowerShellEditorServices/PowerShellEditorServices',
+--   shell = 'powershell.exe',
+-- }
+
 lspconfig.gopls.setup {
   on_attach = require('lvim.lsp.config').on_attach,
   capabilities = require("lvim.lsp.config").capabilities,
@@ -910,8 +915,8 @@ lvim.plugins = {
         },
         window = {
           side = 'right',
-          width = 20, -- set to 1 for a pure scrollbar :)
-          winblend = 15,
+          width = 10, -- set to 1 for a pure scrollbar :)
+          winblend = 10,
           show_integration_count = false,
         },
       })
