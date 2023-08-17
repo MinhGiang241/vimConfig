@@ -189,7 +189,7 @@ require("dapui").setup({
   }
 })
 
-dap.set_log_level("DEBUG")
+dap.set_log_level("TRACE")
 
 -- dap.adapters["pwa-node"] = {
 --   type = "server",
@@ -432,7 +432,37 @@ dap.configurations.cs = {
 -- }
 -- `/` cmdline setup.
 -- -- Additional Plugins <https://www.lunarvim.org/docs/plugins#user-plugins>
+
+-- tailwind color
+-- lvim.builtin.cmp.formatting = {
+--   format = require("tailwindcss-colorizer-cmp").formatter
+-- }
+
+-- tailwinfd color
+local nvim_lsp = require("lspconfig")
+
+local on_attach = function(client, bufnr)
+  -- other stuff --
+  require("tailwindcss-colors").buf_attach(bufnr)
+end
+
+nvim_lsp["tailwindcss"].setup({
+  -- other settings --
+  on_attach = on_attach,
+})
+
+
 lvim.plugins = {
+  {
+    "themaxmarchuk/tailwindcss-colors.nvim",
+    -- load only on require("tailwindcss-colors")
+    module = "tailwindcss-colors",
+    -- run the setup function after plugin is loaded
+    config = function()
+      -- pass config options here (or nothing to use defaults)
+      require("tailwindcss-colors").setup()
+    end
+  },
   --     {
   --       "folke/trouble.nvim",
   --       cmd = "TroubleToggle",
@@ -476,7 +506,7 @@ lvim.plugins = {
             args = { "C:/Users/minhg/Downloads/Development/js-debug/src/dapDebugServer.js", "${port}" },
           }
         }
-        require("dap").set_log_level("DEBUG")
+        require("dap").set_log_level("TRACE")
       end
     end
   },
@@ -493,7 +523,7 @@ lvim.plugins = {
         -- log_console_level = vim.log.levels.ERROR -- Logging level for output to console. Set to false to disable console output.
       })
 
-      require("dap").set_log_level("DEBUG")
+      require("dap").set_log_level("TRACE")
       for _, language in ipairs({ "typescript", "javascript" }) do
         require("dap").configurations[language] = {
           type = "pwa-node",
