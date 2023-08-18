@@ -1,6 +1,6 @@
 -- local require = require("lvim.utils.require").require
 local core_plugins = {
-  { "folke/lazy.nvim",                 tag = "stable" },
+  { "folke/lazy.nvim", tag = "stable" },
   {
     "neovim/nvim-lspconfig",
     lazy = true,
@@ -17,9 +17,10 @@ local core_plugins = {
       settings.current.automatic_installation = false
     end,
     lazy = true,
+    event = "User FileOpened",
     dependencies = "mason.nvim",
   },
-  { "tamago324/nlsp-settings.nvim",    cmd = "LspSettings", lazy = true },
+  { "tamago324/nlsp-settings.nvim", cmd = "LspSettings", lazy = true },
   { "jose-elias-alvarez/null-ls.nvim", lazy = true },
   {
     "williamboman/mason.nvim",
@@ -27,6 +28,12 @@ local core_plugins = {
       require("lvim.core.mason").setup()
     end,
     cmd = { "Mason", "MasonInstall", "MasonUninstall", "MasonUninstallAll", "MasonLog" },
+    build = function()
+      pcall(function()
+        require("mason-registry").refresh()
+      end)
+    end,
+    event = "User FileOpened",
     lazy = true,
   },
   {
@@ -38,9 +45,7 @@ local core_plugins = {
     lazy = lvim.colorscheme ~= "lunar",
   },
   { "Tastyep/structlog.nvim", lazy = true },
-
-  { "nvim-lua/popup.nvim",    lazy = true },
-  { "nvim-lua/plenary.nvim",  cmd = { "PlenaryBustedFile", "PlenaryBustedDirectory" }, lazy = true },
+  { "nvim-lua/plenary.nvim", cmd = { "PlenaryBustedFile", "PlenaryBustedDirectory" }, lazy = true },
   -- Telescope
   {
     "nvim-telescope/telescope.nvim",
@@ -71,10 +76,10 @@ local core_plugins = {
       "cmp-cmdline",
     },
   },
-  { "hrsh7th/cmp-nvim-lsp",                     lazy = true },
-  { "saadparwaiz1/cmp_luasnip",                 lazy = true },
-  { "hrsh7th/cmp-buffer",                       lazy = true },
-  { "hrsh7th/cmp-path",                         lazy = true },
+  { "hrsh7th/cmp-nvim-lsp", lazy = true },
+  { "saadparwaiz1/cmp_luasnip", lazy = true },
+  { "hrsh7th/cmp-buffer", lazy = true },
+  { "hrsh7th/cmp-path", lazy = true },
   {
     "hrsh7th/cmp-cmdline",
     lazy = true,
@@ -149,7 +154,7 @@ local core_plugins = {
 
   -- NvimTree
   {
-    "kyazdani42/nvim-tree.lua",
+    "nvim-tree/nvim-tree.lua",
     config = function()
       require("lvim.core.nvimtree").setup()
     end,
@@ -251,24 +256,13 @@ local core_plugins = {
   -- Debugging
   {
     "mfussenegger/nvim-dap",
-    dependencies = {
-      "rcarriga/nvim-dap-ui",
-      "mxsdev/nvim-dap-vscode-js",
-      -- lazy spec to build "microsoft/vscode-js-debug" from source
-      {
-        "microsoft/vscode-js-debug",
-        version = "1.x",
-        build = "npm i && npm run compile vsDebugServerBundle && mv dist out"
-      }
-    },
     config = function()
-      require("dap-vscode-js").setup({
-        debugger_path = vim.fn.stdpath("data") .. "/lazy/vscode-js-debug",
-        adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' },
-      })
       require("lvim.core.dap").setup()
     end,
     lazy = true,
+    dependencies = {
+      "rcarriga/nvim-dap-ui",
+    },
     enabled = lvim.builtin.dap.active,
   },
 
@@ -368,7 +362,7 @@ local default_snapshot_path = join_paths(get_lvim_base_dir(), "snapshots", "defa
 local content = vim.fn.readfile(default_snapshot_path)
 local default_sha1 = assert(vim.fn.json_decode(content))
 
--- taken form <https://github.com/folke/lazy.nvim/blob/c7122d64cdf16766433588486adcee67571de6d0/lua/lazy/core/plugin.lua#L27>
+-- taken from <https://github.com/folke/lazy.nvim/blob/c7122d64cdf16766433588486adcee67571de6d0/lua/lazy/core/plugin.lua#L27>
 local get_short_name = function(long_name)
   local name = long_name:sub(-4) == ".git" and long_name:sub(1, -5) or long_name
   local slash = name:reverse():find("/", 1, true) --[[@as number?]]

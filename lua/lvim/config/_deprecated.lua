@@ -54,11 +54,32 @@ function M.handle()
   setmetatable(lvim.lsp.popup_border, mt)
 
   ---@deprecated
+  lvim.lsp.float = {}
+  setmetatable(lvim.lsp.float, {
+    __newindex = function(_, k, _)
+      deprecate("lvim.lsp.float." .. k, "Use options provided by the handler instead")
+    end,
+  })
+
+  ---@deprecated
+  lvim.lsp.diagnostics = {}
+  setmetatable(lvim.lsp.diagnostics, {
+    __newindex = function(table, k, v)
+      deprecate("lvim.lsp.diagnostics." .. k, string.format("Use `vim.diagnostic.config({ %s = %s })` instead", k, v))
+      rawset(table, k, v)
+    end,
+  })
+
+  ---@deprecated
   lvim.lang = {}
   setmetatable(lvim.lang, mt)
 end
 
 function M.post_load()
+  if lvim.lsp.diagnostics and not vim.tbl_isempty(lvim.lsp.diagnostics) then
+    vim.diagnostic.config(lvim.lsp.diagnostics)
+  end
+
   if lvim.lsp.override and not vim.tbl_isempty(lvim.lsp.override) then
     deprecate("lvim.lsp.override", "Use `lvim.lsp.automatic_configuration.skipped_servers` instead")
     vim.tbl_map(function(c)
@@ -89,17 +110,14 @@ function M.post_load()
       opt = "lazy",
       run = "build",
       lock = "pin",
-      tag = "version",
+      requires = "dependencies",
     }
 
-    alternatives.requires = function()
-      if type(spec.requires) == "string" then
-        spec.dependencies = { spec.requires }
-      else
-        spec.dependencies = spec.requires
+    alternatives.tag = function()
+      if spec.tag == "*" then
+        spec.version = "*"
+        return [[version = "*"]]
       end
-
-      return "Use `dependencies` instead"
     end
 
     alternatives.disable = function()
@@ -110,42 +128,80 @@ function M.post_load()
       else
         spec.enabled = not spec.disabled
       end
-      return "Use `enabled` instead"
+      return "enabled = " .. vim.inspect(spec.enabled)
     end
 
     alternatives.wants = function()
-      return "It's not needed in most cases, otherwise use `dependencies`."
+      return "dependencies = [value]"
     end
     alternatives.needs = alternatives.wants
 
     alternatives.module = function()
       spec.lazy = true
-      return "Use `lazy = true` instead."
+      return "lazy = true"
     end
 
     for old_key, alternative in pairs(alternatives) do
       if spec[old_key] ~= nil then
         local message
+        local old_value = vim.inspect(spec[old_key]) or "value"
 
         if type(alternative) == "function" then
           message = alternative()
         else
           spec[alternative] = spec[old_key]
         end
-        spec[old_key] = nil
 
-        message = message or string.format("Use `%s` instead.", alternative)
-        deprecate(
-          string.format("%s` in `lvim.plugins", old_key),
-          message .. " See https://github.com/folke/lazy.nvim#-migration-guide"
-        )
+        -- not every function in alternatives returns a message (e.g. tag)
+        if type(alternative) ~= "function" or message then
+          spec[old_key] = nil
+
+          local new_value = vim.inspect(spec[alternative] or "[value]")
+          message = message or string.format("%s = %s", alternative, new_value)
+          vim.schedule(function()
+            vim.notify_once(
+              string.format(
+                [[`%s = %s` in `lvim.plugins` has been deprecated since the migration to lazy.nvim. Use `%s` instead.
+Example:
+`lvim.plugins = {... {... %s = %s ...} ...}`
+->
+`lvim.plugins = {... {... %s ...} ...}`
+See https://github.com/folke/lazy.nvim#-migration-guide"]],
+                old_key,
+                old_value,
+                message,
+                old_key,
+                old_value,
+                message
+              ),
+              vim.log.levels.WARN
+            )
+          end)
+        end
       end
     end
 
     if spec[1] and spec[1]:match "^http" then
       spec.url = spec[1]
       spec[1] = nil
-      deprecate("{ 'http...' }` in `lvim.plugins", "Use { url = 'http...' } instead.")
+
+      vim.schedule(function()
+        vim.notify_once(
+
+          string.format(
+            [[`"http..."` in `lvim.plugins` has been deprecated since the migration to lazy.nvim. Use `url = "http..."` instead.
+Example:
+`lvim.plugins = {... { "%s" ...} ...}`
+->
+`lvim.plugins = {... { url = "%s" ...} ...}`
+See https://github.com/folke/lazy.nvim#-migration-guide"]],
+            spec.url,
+            spec.url
+          ),
+
+          vim.log.levels.WARN
+        )
+      end)
     end
   end
 

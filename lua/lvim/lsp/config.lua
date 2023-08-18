@@ -2,13 +2,15 @@ local skipped_servers = {
   "angularls",
   "ansiblels",
   "antlersls",
+  "azure_pipelines_ls",
   "ccls",
+  "custom_elements_ls",
   "csharp_ls",
   "cssmodules_ls",
-  -- "dartls",
   "denols",
   "docker_compose_language_service",
   "ember",
+  "emmet_language_server",
   "emmet_ls",
   "eslint",
   "eslintls",
@@ -16,6 +18,7 @@ local skipped_servers = {
   "golangci_lint_ls",
   "gradle_ls",
   "graphql",
+  "java_language_server",
   "jedi_language_server",
   "ltex",
   "neocmake",
@@ -23,23 +26,27 @@ local skipped_servers = {
   "phpactor",
   "psalm",
   "pylsp",
+  "pylyzer",
   "pyre",
   "quick_lint_js",
   "reason_ls",
   "rnix",
   "rome",
   "ruby_ls",
+  "rubocop",
   "ruff_lsp",
   "scry",
   "solang",
   "solc",
   "solidity_ls",
+  "solidity_ls_nomicfoundation",
   "sorbet",
   "sourcekit",
   "sourcery",
   "spectral",
   "sqlls",
   "sqls",
+  "standardrb",
   "stylelint_lsp",
   "svlangserver",
   "tflint",
@@ -55,43 +62,10 @@ local join_paths = require("lvim.utils").join_paths
 
 return {
   templates_dir = join_paths(get_runtime_dir(), "site", "after", "ftplugin"),
-  diagnostics = {
-    signs = {
-      active = true,
-      values = {
-        { name = "DiagnosticSignError", text = lvim.icons.diagnostics.Error },
-        { name = "DiagnosticSignWarn",  text = lvim.icons.diagnostics.Warning },
-        { name = "DiagnosticSignHint",  text = lvim.icons.diagnostics.Hint },
-        { name = "DiagnosticSignInfo",  text = lvim.icons.diagnostics.Information },
-      },
-    },
-    virtual_text = true,
-    update_in_insert = false,
-    underline = true,
-    severity_sort = true,
-    float = {
-      focusable = true,
-      style = "minimal",
-      border = "rounded",
-      source = "always",
-      header = "",
-      prefix = "",
-      format = function(d)
-        local code = d.code or (d.user_data and d.user_data.lsp.code)
-        if code then
-          return string.format("%s [%s]", d.message, code):gsub("1. ", "")
-        end
-        return d.message
-      end,
-    },
-  },
+  ---@deprecated use vim.diagnostic.config({ ... }) instead
+  diagnostics = {},
   document_highlight = false,
   code_lens_refresh = true,
-  float = {
-    focusable = true,
-    style = "minimal",
-    border = "rounded",
-  },
   on_attach_callback = nil,
   on_init_callback = nil,
   automatic_configuration = {
@@ -103,16 +77,21 @@ return {
   buffer_mappings = {
     normal_mode = {
       ["K"] = { "<cmd>lua vim.lsp.buf.hover()<cr>", "Show hover" },
-      ["gd"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Goto Definition" },
-      ["gD"] = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Goto declaration" },
+      ["gd"] = { "<cmd>lua vim.lsp.buf.definition()<cr>", "Goto definition" },
+      ["gD"] = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "Goto Declaration" },
       ["gr"] = { "<cmd>lua vim.lsp.buf.references()<cr>", "Goto references" },
       ["gI"] = { "<cmd>lua vim.lsp.buf.implementation()<cr>", "Goto Implementation" },
       ["gs"] = { "<cmd>lua vim.lsp.buf.signature_help()<cr>", "show signature help" },
       ["gl"] = {
         function()
-          local config = lvim.lsp.diagnostics.float
-          config.scope = "line"
-          vim.diagnostic.open_float(0, config)
+          local float = vim.diagnostic.config().float
+
+          if float then
+            local config = type(float) == "table" and float or {}
+            config.scope = "line"
+
+            vim.diagnostic.open_float(config)
+          end
         end,
         "Show line diagnostics",
       },
