@@ -56,6 +56,33 @@ lvim.keys.normal_mode["gd"] = ":lua vim.lsp.buf.definition()<CR>"
 
 -- Automatically install missing parsers when entering buffer
 lvim.builtin.treesitter.auto_install = true
+lvim.autocommands = {
+  {
+    { "BufEnter", "Filetype" },
+    {
+      desc = "Open mini.map and exclude some filetypes",
+      pattern = { "*" },
+      callback = function()
+        local exclude_ft = {
+          "qf",
+          "NvimTree",
+          "toggleterm",
+          "TelescopePrompt",
+          "alpha",
+          "netrw",
+        }
+
+        local map = require('mini.map')
+        if vim.tbl_contains(exclude_ft, vim.o.filetype) then
+          vim.b.minimap_disable = true
+          map.close()
+        elseif vim.o.buftype == "" then
+          map.open()
+        end
+      end,
+    },
+  },
+}
 
 
 local dap = require "dap"
@@ -103,6 +130,7 @@ lspconfig["tailwindcss"].setup({
 })
 
 
+--Plugin
 lvim.plugins = {
   {
     "themaxmarchuk/tailwindcss-colors.nvim",
@@ -115,6 +143,173 @@ lvim.plugins = {
       require("tailwindcss-colors").setup()
     end
   },
+  -- {
+  --   "mxsdev/nvim-dap-vscode-js",
+  --   dependencies = {
+  --     "mfussenegger/nvim-dap"
+  --   },
+  --   opt = true,
+  --   run = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
+  --   config = function()
+  --     require("dap-vscode-js").setup({
+  --       -- node_path = "node", -- Path of node executable. Defaults to $NODE_PATH, and then "node"
+  --       -- debugger_path = "(runtimedir)/site/pack/packer/opt/vscode-js-debug", -- Path to vscode-js-debug installation.
+  --       -- debugger_cmd = { "js-debug-adapter" }, -- Command to use to launch the debug server. Takes precedence over `node_path` and `debugger_path`.
+  --       adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
+  --       -- log_file_path = "(stdpath cache)/dap_vscode_js.log" -- Path for file logging
+  --       -- log_file_level = false -- Logging level for output to file. Set to false to disable file logging.
+  --       -- log_console_level = vim.log.levels.ERROR -- Logging level for output to console. Set to false to disable console output.
+  --     })
+
+  --     for _, language in ipairs({ "typescript", "javascript", "typescriptreact", "javascriptreact" }) do
+  --       require("dap").configurations[language] = {
+  --         -- see below
+  --         {
+  --           type = "pwa-node",
+  --           request = "launch",
+  --           name = "Launch file",
+  --           program = "${file}",
+  --           cwd = "${workspaceFolder}",
+  --           args = { "C:/Users/minhg/Downloads/Development/js-debug/src/dapDebugServer.js", "${port}" },
+  --         },
+  --         {
+  --           type = "pwa-node",
+  --           request = "attach",
+  --           name = "Attach",
+  --           processId = require 'dap.utils'.pick_process,
+  --           cwd = "${workspaceFolder}",
+  --           args = { "C:/Users/minhg/Downloads/Development/js-debug/src/dapDebugServer.js", "${port}" },
+  --         }
+  --       }
+  --       require("dap").set_log_level("TRACE")
+  --     end
+  --   end
+  -- },
+  {
+    "stevearc/dressing.nvim",
+    opts = {},
+  },
+  {
+    "folke/noice.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("noice").setup({
+        lsp = {
+          hover = {
+            enabled = false,
+          },
+          signature = {
+            enabled = false,
+          },
+          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+          override = {
+            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+            ["vim.lsp.util.stylize_markdown"] = true,
+            ["cmp.entry.get_documentation"] = true,
+          },
+        },
+        -- you can enable a preset for easier configuration
+        presets = {
+          bottom_search = false,        -- use a classic bottom cmdline for search
+          command_palette = true,       -- position the cmdline and popupmenu together
+          long_message_to_split = true, -- long messages will be sent to a split
+          inc_rename = false,           -- enables an input dialog for inc-rename.nvim
+          lsp_doc_border = false,       -- add a border to hover docs and signature help
+        },
+      })
+    end,
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    }
+  },
+
+
+  {
+    "fatih/vim-go",
+    -- config = function()
+    --   require("vim-go").setup()
+    -- end
+  },
+
+  {
+    "folke/neodev.nvim",
+    config = function()
+      -- IMPORTANT: make sure to setup neodev BEFORE lspconfig
+      require("neodev").setup({
+        -- add any options here, or leave empty to use the default settings
+        library = { plugins = { "nvim-dap-ui" }, types = true },
+      })
+    end
+  },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    config = function()
+      require("indent_blankline").setup {
+        char = "▏",
+        show_trailing_blankline_indent = false,
+        show_first_indent_level = false,
+        use_treesitter = true,
+      }
+    end
+  },
+  {
+    "smjonas/inc-rename.nvim",
+    config = function()
+      require("inc_rename").setup()
+    end,
+  },
+
+  {
+    "norcalli/nvim-colorizer.lua",
+    config = function()
+      require("colorizer").setup(
+        { "css", "scss", "html", "javascript", "dart", "typescript", "go", "c_sharp", "python" },
+        {
+          rgb = true,      -- #rgb hex codes
+          rrggbb = true,   -- #rrggbb hex codes
+          rrggbbaa = true, -- #rrggbbaa hex codes
+          rgb_fn = true,   -- css rgb() and rgba() functions
+          hsl_fn = true,   -- css hsl() and hsla() functions
+          css = true,      -- enable all css features: rgb_fn, hsl_fn, names, rgb, rrggbb
+          css_fn = true,   -- enable all css *functions*: rgb_fn, hsl_fn
+        }
+      )
+    end,
+  },
+
+
+
+  {
+    "windwp/nvim-ts-autotag",
+    config = function()
+      require("nvim-ts-autotag").setup({
+        filetypes = {
+          "gotmpl", 'gohtmltmpl', 'tmpl', 'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
+          'svelte',
+          'vue', 'tsx',
+          'jsx',
+          'rescript',
+          'xml',
+          'php',
+          'markdown',
+          'glimmer', 'handlebars', 'hbs'
+        },
+        skip_tags = {
+          'area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'slot',
+          'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr', 'menuitem'
+        }
+      })
+    end,
+  },
+
   {
     "dart-lang/dart-vim-plugin",
     ft = { "dart" },
@@ -215,106 +410,6 @@ lvim.plugins = {
         }
       })
     end
-  },
-  {
-    "stevearc/dressing.nvim",
-    opts = {},
-  },
-  {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    config = function()
-      require("noice").setup({
-        lsp = {
-          hover = {
-            enabled = false,
-          },
-          signature = {
-            enabled = false,
-          },
-          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
-          override = {
-            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = true,
-          },
-        },
-        -- you can enable a preset for easier configuration
-        presets = {
-          bottom_search = false,        -- use a classic bottom cmdline for search
-          command_palette = true,       -- position the cmdline and popupmenu together
-          long_message_to_split = true, -- long messages will be sent to a split
-          inc_rename = false,           -- enables an input dialog for inc-rename.nvim
-          lsp_doc_border = false,       -- add a border to hover docs and signature help
-        },
-      })
-    end,
-    opts = {
-      -- add any options here
-    },
-    dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-      "MunifTanjim/nui.nvim",
-      -- OPTIONAL:
-      --   `nvim-notify` is only needed, if you want to use the notification view.
-      --   If not available, we use `mini` as the fallback
-      "rcarriga/nvim-notify",
-    }
-  },
-  {
-    "folke/neodev.nvim",
-    config = function()
-      -- IMPORTANT: make sure to setup neodev BEFORE lspconfig
-      require("neodev").setup({
-        -- add any options here, or leave empty to use the default settings
-        library = { plugins = { "nvim-dap-ui" }, types = true },
-      })
-    end
-  },
-  {
-    "smjonas/inc-rename.nvim",
-    config = function()
-      require("inc_rename").setup()
-    end,
-  },
-  {
-    "norcalli/nvim-colorizer.lua",
-    config = function()
-      require("colorizer").setup(
-        { "css", "scss", "html", "javascript", "dart", "typescript", "go", "c_sharp", "python" },
-        {
-          rgb = true,      -- #rgb hex codes
-          rrggbb = true,   -- #rrggbb hex codes
-          rrggbbaa = true, -- #rrggbbaa hex codes
-          rgb_fn = true,   -- css rgb() and rgba() functions
-          hsl_fn = true,   -- css hsl() and hsla() functions
-          css = true,      -- enable all css features: rgb_fn, hsl_fn, names, rgb, rrggbb
-          css_fn = true,   -- enable all css *functions*: rgb_fn, hsl_fn
-        }
-      )
-    end,
-  },
-  {
-    "windwp/nvim-ts-autotag",
-    config = function()
-      require("nvim-ts-autotag").setup({
-        filetypes = {
-          "gotmpl", 'gohtmltmpl', 'tmpl', 'html', 'javascript', 'typescript', 'javascriptreact', 'typescriptreact',
-          'svelte',
-          'vue', 'tsx',
-          'jsx',
-          'rescript',
-          'xml',
-          'php',
-          'markdown',
-          'glimmer', 'handlebars', 'hbs'
-        },
-        skip_tags = {
-          'area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'slot',
-          'input', 'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr', 'menuitem'
-        }
-      })
-    end,
   },
   {
     "theHamsta/nvim-dap-virtual-text",
@@ -440,7 +535,7 @@ lvim.plugins = {
     "folke/trouble.nvim",
     cmd = "TroubleToggle",
   },
-{
+  {
     "npxbr/glow.nvim",
     ft = { "markdown" }
     -- run = "yay -S glow"
@@ -548,5 +643,4 @@ lvim.plugins = {
       })
     end
   }
-  
 }
