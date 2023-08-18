@@ -46,6 +46,7 @@ lvim.format_on_save = {
 lvim.leader = "space"
 
 lvim.keys.normal_mode["<C-s>"] = ":w<cr>"
+lvim.keys.normal_mode["gl"] = "<cmd>lua vim.diagnostic.open_float()<cr>"
 lvim.builtin.which_key.setup.plugins.presets.z = true
 
 -- lvim.keys.normal_mode["<S-l>"] = ":BufferLineCycleNext<CR>"
@@ -836,10 +837,10 @@ lvim.plugins = {
     "sindrets/diffview.nvim",
     event = "BufRead",
   },
-  {
-    "nvim-treesitter/playground",
-    event = "BufRead",
-  },
+  -- {
+  --   "nvim-treesitter/playground",
+  --   event = "BufRead",
+  -- },
   {
     "rmagatti/goto-preview",
     config = function()
