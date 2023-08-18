@@ -178,7 +178,7 @@ function M.buf_kill(kill_command, bufnr, force)
   local bo = vim.bo
   local api = vim.api
   local fmt = string.format
-  local fn = vim.fn
+  local fnamemodify = vim.fn.fnamemodify
 
   if bufnr == 0 or bufnr == nil then
     bufnr = api.nvim_get_current_buf()
@@ -187,24 +187,19 @@ function M.buf_kill(kill_command, bufnr, force)
   local bufname = api.nvim_buf_get_name(bufnr)
 
   if not force then
-    local choice
+    local warning
     if bo[bufnr].modified then
-      choice = fn.confirm(fmt([[Save changes to "%s"?]], bufname), "&Yes\n&No\n&Cancel")
-      if choice == 1 then
-        vim.api.nvim_buf_call(bufnr, function()
-          vim.cmd("w")
-        end)
-      elseif choice == 2 then
-        force = true
-      else return
-      end
+      warning = fmt([[No write since last change for (%s)]], fnamemodify(bufname, ":t"))
     elseif api.nvim_buf_get_option(bufnr, "buftype") == "terminal" then
-      choice = fn.confirm(fmt([[Close "%s"?]], bufname), "&Yes\n&No\n&Cancel")
-      if choice == 1 then
-        force = true
-      else
-        return
-      end
+      warning = fmt([[Terminal %s will be killed]], bufname)
+    end
+    if warning then
+      vim.ui.input({
+        prompt = string.format([[%s. Close it anyway? [y]es or [n]o (default: no): ]], warning),
+      }, function(choice)
+        if choice ~= nil and choice:match "ye?s?" then M.buf_kill(kill_command, bufnr, true) end
+      end)
+      return
     end
   end
 
